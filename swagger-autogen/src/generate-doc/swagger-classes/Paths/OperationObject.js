@@ -1,9 +1,7 @@
 import NodeDocument from "../../base-classes/NodeDocument.js";
-export default class Paths extends NodeDocument {
+export default class PathItem extends NodeDocument {
     constructor() {
         super();
     }
-    getContent() {
-    }
 }
-//# sourceMappingURL=Paths.js.map
+//# sourceMappingURL=PathItem.js.map

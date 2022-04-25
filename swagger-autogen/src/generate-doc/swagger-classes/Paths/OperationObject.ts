@@ -1,19 +1,13 @@
-import {QueryType} from "../../../Enums/QueryType";
 import NodeDocument from "../../base-classes/NodeDocument.js";
 
 export default class PathItem extends NodeDocument
 {
-    method: QueryType;
+    method: string;
     summary: string;
     description: string;
 
     constructor()
     {
         super();
-    }
-
-    getContent()
-    {
-
     }
 }

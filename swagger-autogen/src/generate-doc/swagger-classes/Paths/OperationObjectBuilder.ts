@@ -1,10 +1,9 @@
-import PathItem from "./PathItem.js";
-import {QueryType} from "../../../Enums/QueryType";
+import OperationObject from "./OperationObject.js";
 import NodeDocument from "../../base-classes/NodeDocument.js";
 
 export default class PathItemBuilder
 {
-    private item: PathItem;
+    private item: OperationObject;
 
     constructor()
     {
@@ -13,17 +12,17 @@ export default class PathItemBuilder
 
     reset()
     {
-        this.item = new PathItem();
+        this.item = new OperationObject();
     }
 
-    getItem(): PathItem
+    getItem(): OperationObject
     {
         let res = this.item;
         this.reset();
         return res;
     }
 
-    setMethod(method: QueryType)
+    setMethod(method: string)
     {
         this.item.method = method;
     }

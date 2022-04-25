@@ -1,10 +1,10 @@
-import PathItem from "./PathItem.js";
+import OperationObject from "./OperationObject.js";
 export default class PathItemBuilder {
     constructor() {
         this.reset();
     }
     reset() {
-        this.item = new PathItem();
+        this.item = new OperationObject();
     }
     getItem() {
         let res = this.item;

@@ -1,1 +1,0 @@
-{"version":3,"file":"PropertiesItem.js","sourceRoot":"","sources":["PropertiesItem.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,OAAO;IAMV,YAAY,IAAU,EAAE,MAAc,EAAE,WAAmB;QAEvD,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;QACjB,IAAI,CAAC,MAAM,GAAG,MAAM,CAAC;QACrB,IAAI,CAAC,WAAW,GAAG,WAAW,CAAC;IACnC,CAAC;CACJ"}
