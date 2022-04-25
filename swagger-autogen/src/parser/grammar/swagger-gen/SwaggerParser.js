@@ -59,7 +59,7 @@ const decisionsToDFA = atn.decisionToState.map( (ds, index) => new antlr4.dfa.DF
 
 const sharedContextCache = new antlr4.PredictionContextCache();
 
-module.exports = class SwaggerParser extends antlr4.Parser {
+class SwaggerParser extends antlr4.Parser {
 
     static grammarFileName = "SwaggerParser.g4";
     static literalNames = [ null, null, "'<'", null, "'>'", "'/>'", "'/'", 
@@ -735,4 +735,6 @@ SwaggerParser.SwaggerElementsContext = SwaggerElementsContext;
 SwaggerParser.SwaggerElementContext = SwaggerElementContext; 
 SwaggerParser.SwaggerContentContext = SwaggerContentContext; 
 SwaggerParser.SwaggerAttributeContext = SwaggerAttributeContext; 
-SwaggerParser.SwaggerChardataContext = SwaggerChardataContext; 
+SwaggerParser.SwaggerChardataContext = SwaggerChardataContext;
+
+module.exports = SwaggerParser;

@@ -116,7 +116,7 @@ const atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
 
 const decisionsToDFA = atn.decisionToState.map( (ds, index) => new antlr4.dfa.DFA(ds, index) );
 
-module.exports = class SwaggerLexer extends antlr4.Lexer {
+class SwaggerLexer extends antlr4.Lexer {
 
     static grammarFileName = "SwaggerLexer.g4";
     static channelNames = [ "DEFAULT_TOKEN_CHANNEL", "HIDDEN" ];
@@ -161,5 +161,5 @@ SwaggerLexer.TAG = 1;
 SwaggerLexer.ATTVALUE = 2;
 
 
-
+module.exports = SwaggerLexer;
 
