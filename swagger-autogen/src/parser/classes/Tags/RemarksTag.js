@@ -1,5 +1,5 @@
-import BaseTag from "./BaseTag.js";
-export default class RemarksTag extends BaseTag {
+const BaseTag = require("./BaseTag.js");
+module.exports = class RemarksTag extends BaseTag {
     constructor(content) {
         super("description");
         this.content = content;

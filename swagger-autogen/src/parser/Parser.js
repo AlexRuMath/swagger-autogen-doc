@@ -1,8 +1,9 @@
-import * as fs from 'fs';
-import Rout from './classes/Elements/Rout.js';
-import Url from "./classes/Elements/Url.js";
-import Comment from "./classes/Elements/Comment.js";
-export default class Parser {
+const fs = require('fs');
+const Rout = require('./classes/Elements/Rout.js');
+const Url = require('./classes/Elements/Url.js');
+const Comment = require("./classes/Elements/Comment.js");
+
+class Parser {
     constructor() {
         this._regexRouter = /\.(get|post|delete|put)\('(\/.*)*'/g;
     }
@@ -87,9 +88,5 @@ export default class Parser {
         return res;
     }
 }
-var parser = new Parser();
-let res_1 = parser.parse('/home/alex/Project/NodeJs/swagger-autogen-doc/Express');
-let res_2 = parser.parse('/home/alex/Project/NodeJs/poker-game-instance/');
-let a = res_1.get('/index');
-//console.log(res_1);
-//# sourceMappingURL=Parser.js.map
+
+module.exports = Parser;

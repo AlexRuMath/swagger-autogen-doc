@@ -1,5 +1,5 @@
-import BaseTag from "./BaseTag.js";
-export default class BodyTag extends BaseTag {
+const BaseTag = require("./BaseTag.js");
+module.exports = class BodyTag extends BaseTag {
     constructor(data, params) {
         super("body");
         if (params.length !== 0) {

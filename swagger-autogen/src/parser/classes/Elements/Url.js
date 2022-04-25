@@ -1,4 +1,4 @@
-export default class Url {
+module.exports = class Url {
     constructor(path) {
         this.path = path;
         this.params = [];

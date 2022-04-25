@@ -1,4 +1,4 @@
-export default class BaseTag {
+module.exports = class BaseTag {
     constructor(name) {
         this.name = name;
     }

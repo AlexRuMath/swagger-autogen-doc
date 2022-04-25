@@ -1,9 +1,9 @@
-import SummaryTag from "./Tags/SummaryTag.js";
-import RemarksTag from "./Tags/RemarksTag.js";
-import ResponseTag from "./Tags/ResponseTag.js";
-import ParamTag from "./Tags/ParamTag.js";
-import BodyTag from "./Tags/BodyTag.js";
-export default class TagFabric {
+const SummaryTag = require("./Tags/SummaryTag.js");
+const RemarksTag = require("./Tags/RemarksTag.js");
+const ResponseTag = require("./Tags/ResponseTag.js");
+const ParamTag = require("./Tags/ParamTag.js");
+const BodyTag = require("./Tags/BodyTag.js");
+module.exports = class TagFabric {
     createSummaryTag(content) {
         return new SummaryTag(content);
     }

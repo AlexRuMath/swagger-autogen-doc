@@ -1,9 +1,8 @@
-import SwaggerParserVisitor from "../grammar/swagger-gen/SwaggerParserVisitor.js";
-
-import TagFabric from "../classes/TagFabric.js";
+const SwaggerParserVisitor = require("../grammar/swagger-gen/SwaggerParserVisitor.js");
+const TagFabric = require("../classes/TagFabric.js");
 // This class defines a complete generic visitor for a parse tree produced by SwaggerParser.
 
-export default class CommentsVisitor extends SwaggerParserVisitor {
+module.exports = class CommentsVisitor extends SwaggerParserVisitor {
 
 	constructor()
 	{

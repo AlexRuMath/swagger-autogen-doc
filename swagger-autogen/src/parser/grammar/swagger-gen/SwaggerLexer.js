@@ -1,6 +1,6 @@
 // Generated from /home/alex/Project/NodeJs/swagger-autogen-doc/swagger-autogen/src/parser/grammar/SwaggerLexer.g4 by ANTLR 4.9.1
 // jshint ignore: start
-import antlr4 from 'antlr4';
+const antlr4 = require('antlr4');
 
 
 
@@ -116,7 +116,7 @@ const atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
 
 const decisionsToDFA = atn.decisionToState.map( (ds, index) => new antlr4.dfa.DFA(ds, index) );
 
-export default class SwaggerLexer extends antlr4.Lexer {
+module.exports = class SwaggerLexer extends antlr4.Lexer {
 
     static grammarFileName = "SwaggerLexer.g4";
     static channelNames = [ "DEFAULT_TOKEN_CHANNEL", "HIDDEN" ];

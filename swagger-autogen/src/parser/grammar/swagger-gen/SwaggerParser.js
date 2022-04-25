@@ -1,8 +1,8 @@
 // Generated from /home/alex/Project/NodeJs/swagger-autogen-doc/swagger-autogen/src/parser/grammar/SwaggerParser.g4 by ANTLR 4.9.1
 // jshint ignore: start
-import antlr4 from 'antlr4';
-import SwaggerParserListener from './SwaggerParserListener.js';
-import SwaggerParserVisitor from './SwaggerParserVisitor.js';
+const antlr4 = require('antlr4');
+const SwaggerParserListener = require('./SwaggerParserListener.js');
+const SwaggerParserVisitor = require('./SwaggerParserVisitor.js');
 
 
 const serializedATN = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786",
@@ -59,7 +59,7 @@ const decisionsToDFA = atn.decisionToState.map( (ds, index) => new antlr4.dfa.DF
 
 const sharedContextCache = new antlr4.PredictionContextCache();
 
-export default class SwaggerParser extends antlr4.Parser {
+module.exports = class SwaggerParser extends antlr4.Parser {
 
     static grammarFileName = "SwaggerParser.g4";
     static literalNames = [ null, null, "'<'", null, "'>'", "'/>'", "'/'", 

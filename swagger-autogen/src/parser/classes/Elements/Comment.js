@@ -1,8 +1,9 @@
-import SwaggerLexer from "../../grammar/swagger-gen/SwaggerLexer.js";
-import SwaggerParser from "../../grammar/swagger-gen/SwaggerParser.js";
-import CommentsVisitor from "../../visitors/CommentsVisitor.js";
-import * as antlr4 from "antlr4";
-export default class Comment {
+const SwaggerLexer = require("../../grammar/swagger-gen/SwaggerLexer.js");
+const SwaggerParser = require("../../grammar/swagger-gen/SwaggerParser.js");
+const CommentsVisitor = require("../../visitors/CommentsVisitor.js");
+const antlr4 = require("antlr4");
+
+module.exports = class Comment {
     constructor(data, startIndex, endIndex) {
         this.data = data;
         this.startIndex = startIndex;

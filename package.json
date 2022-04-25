@@ -2,9 +2,8 @@
   "name": "swagger-autogen-doc",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./swagger-autogen/swagger-autogen"
   },
   "dependencies": {
     "antlr4": "^4.9.3",

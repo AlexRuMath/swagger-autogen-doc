@@ -1,4 +1,4 @@
-export default class Rout {
+module.exports = class Rout {
     constructor(method, url, index) {
         this.index = index;
         this.method = method;

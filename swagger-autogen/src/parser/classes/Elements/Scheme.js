@@ -1,4 +1,4 @@
-export default class Scheme {
+module.exports = class Scheme {
     constructor(name, jsonScheme) {
         this.name = name;
         this.scheme = JSON.parse(jsonScheme);
