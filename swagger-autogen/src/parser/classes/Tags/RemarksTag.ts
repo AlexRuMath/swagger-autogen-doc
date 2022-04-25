@@ -1,11 +1,13 @@
-import Tag from './../../interfaces/Tag'
+import BaseTag from "./BaseTag.js";
 
-export default class RemarksTag implements Tag
+export default class RemarksTag extends BaseTag
 {
     content: string;
 
     constructor(content)
     {
+        super("description");
+
         this.content = content;
     }
 

@@ -1,7 +1,7 @@
 import OperationObject from "./OperationObject.js";
 import NodeDocument from "../../base-classes/NodeDocument.js";
 
-export default class PathItemBuilder
+export default class OperationObjectBuilder
 {
     private item: OperationObject;
 
@@ -27,23 +27,23 @@ export default class PathItemBuilder
         this.item.method = method;
     }
 
-    setSummary(content: string)
+    setSummary(summary: string)
     {
-        this.item.summary = content;
+        this.item.summary = summary;
     }
 
-    setDescription(content: string)
+    setDescription(description: string)
     {
-        this.item.description = content;
+        this.item.description = description;
     }
 
-    setResponses(responses: NodeDocument)
+    setResponses(responses: object)
     {
-        this.item.addChildren("response", responses);
+        this.item.responses.set("100", responses);
     }
 
-    setParameters(parameters: NodeDocument)
+    setParameters(parameters: object)
     {
-        this.item.addChildren("parameters", parameters);
+        this.item.parameters = parameters;
     }
 }

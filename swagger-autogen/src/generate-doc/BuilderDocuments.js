@@ -1,8 +1,9 @@
 import Parser from "../parser/Parser.js";
-import Paths from "./swagger-classes/Paths/Paths.js";
-import PathItemBuilder from "./swagger-classes/Paths/PathItemBuilder.js";
+import OperationObjectBuilder from "./swagger-classes/Paths/OperationObjectBuilder.js";
 var parser = new Parser();
-let res = parser.parse('/home/alex/Project/NodeJs/swagger-autogen-doc/Express');
+let dir_1 = '/home/alex/Project/NodeJs/swagger-autogen-doc/Express';
+let dir_poker = '/home/alex/Project/NodeJs/poker-game-instance/';
+let res = parser.parse(dir_1);
 export default class BuilderDocuments {
     constructor() {
         this.reset();
@@ -15,20 +16,23 @@ export default class BuilderDocuments {
     reset() {
         this.document = {};
     }
-    writePaths(routs) {
-        routs.forEach((compositeArray, path) => {
-            let pathItemBuilder = new PathItemBuilder();
-            let paths = new Paths();
-            for (let i = 0; i < compositeArray.length; i++) {
-                let composite = compositeArray[i];
-                if (composite.comment) {
-                    let comment = composite.comment;
-                    console.log(comment.tags['summary']);
+    writePaths(mapRoutes) {
+        this.document['paths'] = {};
+        let operationObjectBuilder = new OperationObjectBuilder();
+        mapRoutes.forEach((routes, path) => {
+            routes.forEach((rout) => {
+                operationObjectBuilder.setMethod(rout.method);
+                if (rout.comment) {
+                    let comment = rout.comment;
+                    operationObjectBuilder.setSummary(comment.tags.get("summary"));
                 }
-            }
+            });
+            this.document['paths'][path] = operationObjectBuilder.getItem();
         });
     }
 }
 let builder = new BuilderDocuments();
 builder.writePaths(res);
+let doc = builder.getItem();
+console.log(doc);
 //# sourceMappingURL=BuilderDocuments.js.map

@@ -1,13 +1,15 @@
-import Tag from './../../interfaces/Tag'
 import {ParserRuleContext} from "antlr4";
+import BaseTag from "./BaseTag.js";
 
-export default class BodyTag implements Tag
+export default class BodyTag extends BaseTag
 {
     scheme: object;
     params: string;
 
     constructor(data: string, params: ParserRuleContext[])
     {
+        super("body");
+
         if(params.length !== 0)
         {
             this.params = params[0].getText().split('=')[1];
@@ -18,6 +20,6 @@ export default class BodyTag implements Tag
 
     getContent()
     {
-        return this.scheme;
+
     }
 }

@@ -2,22 +2,20 @@ import * as fs from 'fs';
 import Rout from './classes/Elements/Rout.js';
 import Url from "./classes/Elements/Url.js";
 import Comment from "./classes/Elements/Comment.js";
-import Composite from "./classes/Composite.js";
 export default class Parser {
     constructor() {
         this._regexRouter = /\.(get|post|delete|put)\('(\/.*)*'/g;
     }
     parse(dir) {
         let res = new Map();
-        let components = this.readAllFilesFromFolder(dir);
-        for (let i = 0; i < components.length; i++) {
-            let component = components[i];
-            let rout = component.element;
+        let routs = this.readAllFilesFromFolder(dir);
+        for (let i = 0; i < routs.length; i++) {
+            let rout = routs[i];
             let path = rout.url.path;
-            if (!res[path]) {
+            if (!res.get(path)) {
                 res.set(path, []);
             }
-            res.get(path).push(component);
+            res.get(path).push(rout);
         }
         return res;
     }
@@ -36,7 +34,7 @@ export default class Parser {
                 let comments = this.getComments(text);
                 let routs = this.getRouts(text);
                 if (routs.length !== 0) {
-                    let components = this.getComposite(routs, comments);
+                    let components = this.concatCommentAndRout(routs, comments);
                     results = results.concat(components);
                 }
             }
@@ -70,7 +68,7 @@ export default class Parser {
         }
         return res;
     }
-    getComposite(element, comments) {
+    concatCommentAndRout(element, comments) {
         let res = [];
         let abs = Math.abs;
         for (let i = 0; i < element.length; i++) {
@@ -83,8 +81,8 @@ export default class Parser {
                     min = cur_min;
                 }
             }
-            let swaggerElement = new Composite(element[i], comments[index_min]);
-            res.push(swaggerElement);
+            element[i].setComment(comments[index_min]);
+            res.push(element[i]);
         }
         return res;
     }
@@ -92,5 +90,6 @@ export default class Parser {
 var parser = new Parser();
 let res_1 = parser.parse('/home/alex/Project/NodeJs/swagger-autogen-doc/Express');
 let res_2 = parser.parse('/home/alex/Project/NodeJs/poker-game-instance/');
-console.log(res_1.get('/index'));
+let a = res_1.get('/index');
+//console.log(res_1);
 //# sourceMappingURL=Parser.js.map

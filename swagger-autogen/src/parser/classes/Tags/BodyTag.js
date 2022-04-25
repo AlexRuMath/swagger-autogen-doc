@@ -1,5 +1,7 @@
-export default class BodyTag {
+import BaseTag from "./BaseTag.js";
+export default class BodyTag extends BaseTag {
     constructor(data, params) {
+        super("body");
         if (params.length !== 0) {
             this.params = params[0].getText().split('=')[1];
         }
@@ -8,7 +10,6 @@ export default class BodyTag {
         }
     }
     getContent() {
-        return this.scheme;
     }
 }
 //# sourceMappingURL=BodyTag.js.map

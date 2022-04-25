@@ -1,16 +1,13 @@
-import Tag from './../../interfaces/Tag'
+import BaseTag from "./BaseTag.js";
 
-export default class SummaryTag implements Tag
+export default class SummaryTag extends BaseTag
 {
     content: string;
 
     constructor(content)
     {
-        this.content = content;
-    }
+        super("summary");
 
-    getContent()
-    {
-        return this.content;
+        this.content = content;
     }
 }

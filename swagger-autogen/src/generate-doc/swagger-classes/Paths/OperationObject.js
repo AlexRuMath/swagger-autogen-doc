@@ -1,7 +1,7 @@
-import NodeDocument from "../../base-classes/NodeDocument.js";
-export default class PathItem extends NodeDocument {
+import LeafTree from "../../../Tree/LeafTree.js";
+export default class OperationObject extends LeafTree {
     constructor() {
-        super();
+        super("");
     }
 }
-//# sourceMappingURL=PathItem.js.map
+//# sourceMappingURL=OperationObject.js.map

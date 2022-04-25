@@ -2,7 +2,6 @@ import * as fs from 'fs'
 import Rout from './classes/Elements/Rout.js';
 import Url from "./classes/Elements/Url.js";
 import Comment from "./classes/Elements/Comment.js";
-import Composite from "./classes/Composite.js";
 
 export default class Parser
 {
@@ -14,31 +13,29 @@ export default class Parser
     }
 
 
-    parse(dir: string) : Map<string, Composite[]>
+    parse(dir: string) : Map<string, Rout[]>
     {
-        let res = new Map<string, Composite[]>();
-        let components = this.readAllFilesFromFolder(dir);
+        let res = new Map<string, Rout[]>();
+        let routs = this.readAllFilesFromFolder(dir);
 
-        for(let i = 0; i < components.length; i++)
+        for(let i = 0; i < routs.length; i++)
         {
-            let component = components[i];
-
-            let rout = component.element;
+            let rout = routs[i];
             let path = rout.url.path;
 
-            if(!res[path])
+            if(!res.get(path))
             {
-                res.set(path, [])
+                res.set(path, []);
             }
 
-            res.get(path).push(component);
+            res.get(path).push(rout);
         }
 
         return res;
     }
 
 
-    private readAllFilesFromFolder(dir: string) : Composite[]
+    private readAllFilesFromFolder(dir: string) : Rout[]
     {
         let results = [];
         let files = fs.readdirSync(dir);
@@ -59,7 +56,7 @@ export default class Parser
 
                 if(routs.length !== 0)
                 {
-                    let components = this.getComposite(routs, comments);
+                    let components = this.concatCommentAndRout(routs, comments);
                     results = results.concat(components);
                 }
             }
@@ -108,7 +105,7 @@ export default class Parser
     }
 
 
-    private getComposite(element, comments) : Composite[]
+    private concatCommentAndRout(element, comments) : Rout[]
     {
         let res = [];
         let abs = Math.abs;
@@ -127,8 +124,8 @@ export default class Parser
                 }
             }
 
-            let swaggerElement = new Composite(element[i], comments[index_min]);
-            res.push(swaggerElement);
+            element[i].setComment(comments[index_min]);
+            res.push(element[i]);
         }
 
         return res;
@@ -140,4 +137,6 @@ var parser = new Parser();
 let res_1 = parser.parse('/home/alex/Project/NodeJs/swagger-autogen-doc/Express');
 let res_2 = parser.parse('/home/alex/Project/NodeJs/poker-game-instance/');
 
-console.log(res_1.get('/index'));
+let a = res_1.get('/index');
+
+//console.log(res_1);

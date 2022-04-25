@@ -1,15 +1,11 @@
-import Tag from "../../interfaces/Tag";
-
 import SwaggerLexer from "../../grammar/swagger-gen/SwaggerLexer.js";
-
 import SwaggerParser from "../../grammar/swagger-gen/SwaggerParser.js";
-
 import CommentsVisitor from "../../visitors/CommentsVisitor.js";
-
+import BaseTag from "../Tags/BaseTag.js";
 import * as antlr4 from "antlr4";
 
-export default class Comment {
-    tags: Tag[];
+export default class Comment{
+    tags: Map<string, BaseTag[]>;
     data: string;
     startIndex: number;
     endIndex: number;
@@ -18,6 +14,7 @@ export default class Comment {
         this.data = data;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
+        this.tags = new Map<string, BaseTag[]>();
 
         this.getSwaggerElementsFromData();
     }
@@ -31,6 +28,14 @@ export default class Comment {
         let visitor = new CommentsVisitor();
         visitor.visitSwaggerDocument(tree);
 
-        this.tags = visitor.tags;
+        for(let tag in visitor.tags)
+        {
+            if(!this.tags.get(tag))
+            {
+                this.tags.set(tag, [])
+            }
+
+            this.tags.get(tag).push(visitor.tags[tag])
+        }
     }
 }

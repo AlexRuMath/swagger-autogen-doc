@@ -77,10 +77,11 @@ export default class CommentsVisitor extends SwaggerParserVisitor {
             createTag = this.tagFabric.createBodyTag(content, parameters);
         }
 
-        if(!this.tags[tag])
+        if (!this.tags[tag])
 		{
-            this.tags[tag] = [];
+			this.tags[tag] = []
 		}
+
         this.tags[tag].push(createTag);
 	}
 }

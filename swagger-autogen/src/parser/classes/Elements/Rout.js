@@ -4,5 +4,8 @@ export default class Rout {
         this.method = method;
         this.url = url;
     }
+    setComment(comment) {
+        this.comment = comment;
+    }
 }
 //# sourceMappingURL=Rout.js.map

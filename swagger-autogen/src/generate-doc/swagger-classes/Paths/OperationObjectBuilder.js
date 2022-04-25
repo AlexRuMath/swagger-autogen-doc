@@ -1,5 +1,5 @@
 import OperationObject from "./OperationObject.js";
-export default class PathItemBuilder {
+export default class OperationObjectBuilder {
     constructor() {
         this.reset();
     }
@@ -14,17 +14,17 @@ export default class PathItemBuilder {
     setMethod(method) {
         this.item.method = method;
     }
-    setSummary(content) {
-        this.item.summary = content;
+    setSummary(summary) {
+        this.item.summary = summary;
     }
-    setDescription(content) {
-        this.item.description = content;
+    setDescription(description) {
+        this.item.description = description;
     }
     setResponses(responses) {
-        this.item.addChildren("response", responses);
+        this.item.responses.set("100", responses);
     }
     setParameters(parameters) {
-        this.item.addChildren("parameters", parameters);
+        this.item.parameters = parameters;
     }
 }
-//# sourceMappingURL=PathItemBuilder.js.map
+//# sourceMappingURL=OperationObjectBuilder.js.map

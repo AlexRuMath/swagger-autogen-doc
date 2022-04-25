@@ -1,15 +1,13 @@
-import Composite from "../parser/classes/Composite.js";
 import Parser from "../parser/Parser.js";
-import Paths from "./swagger-classes/Paths/Paths.js";
-import PathItemBuilder from "./swagger-classes/Paths/PathItemBuilder.js";
-import Responses from "./swagger-classes/Responses/Responses";
-import ResponseTag from "../parser/classes/Tags/ResponseTag";
-import {ResponseItem} from "./swagger-classes/Responses/ResponseItem";
-import Tag from "../parser/interfaces/Tag";
-import ParametersBody from "./swagger-classes/Parameters/ParametersBody";
+import OperationObjectBuilder from "./swagger-classes/Paths/OperationObjectBuilder.js";
+import Rout from "../parser/classes/Elements/Rout.js";
+import OperationObject from "./swagger-classes/Paths/OperationObject.js";
+import NodeTree from "../Tree/NodeTree.js";
 
 var parser = new Parser();
-let res = parser.parse('/home/alex/Project/NodeJs/swagger-autogen-doc/Express');
+let dir_1 = '/home/alex/Project/NodeJs/swagger-autogen-doc/Express';
+let dir_poker = '/home/alex/Project/NodeJs/poker-game-instance/';
+let res = parser.parse(dir_1);
 
 export default class BuilderDocuments
 {
@@ -33,29 +31,33 @@ export default class BuilderDocuments
         this.document = {}
     }
 
-    writePaths(routs: Map<string, Composite[]>)
+    writePaths(mapRoutes: Map<string, Rout[]>)
     {
-        routs.forEach((compositeArray: Composite[], path: string) =>
-        {
-            let pathItemBuilder = new PathItemBuilder();
-            let paths = new Paths();
+        this.document['paths'] = {};
+        let operationObjectBuilder = new OperationObjectBuilder();
 
-            for(let i = 0; i < compositeArray.length; i++)
-            {
-                let composite = compositeArray[i];
+        mapRoutes.forEach((routes: Rout[], path: string) => {
+            routes.forEach((rout: Rout) => {
+                operationObjectBuilder.setMethod(rout.method);
 
-                if(composite.comment)
+                if(rout.comment)
                 {
-                    let comment = composite.comment;
+                    let comment = rout.comment;
+                    operationObjectBuilder.setSummary(comment.tags.get("summary"));
 
-                    console.log(comment.tags['summary']);
                 }
-            }
-        })
-    }
+            });
 
+            this.document['paths'][path] = operationObjectBuilder.getItem();
+        });
+    }
 }
 
 let builder = new BuilderDocuments();
 
 builder.writePaths(res);
+
+let doc = builder.getItem();
+
+console.log(doc);
+

@@ -1,1 +1,1 @@
-{"version":3,"file":"PathItem.js","sourceRoot":"","sources":["PathItem.ts"],"names":[],"mappings":"AAAA,OAAO,YAAY,MAAM,oCAAoC,CAAC;AAE9D,MAAM,CAAC,OAAO,eAAgB,SAAQ,YAAY;IAM9C;QAEI,KAAK,EAAE,CAAC;IACZ,CAAC;CACJ"}
+{"version":3,"file":"OperationObject.js","sourceRoot":"","sources":["OperationObject.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,MAAM,2BAA2B,CAAC;AAEjD,MAAM,CAAC,OAAO,sBAAuB,SAAQ,QAAQ;IAQjD;QAEI,KAAK,CAAC,EAAE,CAAC,CAAC;IACd,CAAC;CACJ"}

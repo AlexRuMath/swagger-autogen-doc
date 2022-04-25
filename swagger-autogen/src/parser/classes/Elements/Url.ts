@@ -19,6 +19,7 @@ export default class Url
         if(matchParams)
         {
             this.params = matchParams[0].split('/:').filter((el) => el !== '');
+            this.path = this.path.replace(matchParams[0], `/{${this.params}}`);
         }
     }
 }

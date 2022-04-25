@@ -9,6 +9,7 @@ export default class Url {
         let matchParams = _regexParamsUrl.exec(this.path);
         if (matchParams) {
             this.params = matchParams[0].split('/:').filter((el) => el !== '');
+            this.path = this.path.replace(matchParams[0], `/{${this.params}}`);
         }
     }
 }

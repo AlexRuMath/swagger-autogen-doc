@@ -7,6 +7,7 @@ export default class Comment {
         this.data = data;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
+        this.tags = new Map();
         this.getSwaggerElementsFromData();
     }
     getSwaggerElementsFromData() {
@@ -17,7 +18,12 @@ export default class Comment {
         let tree = parser.swaggerDocument();
         let visitor = new CommentsVisitor();
         visitor.visitSwaggerDocument(tree);
-        this.tags = visitor.tags;
+        for (let tag in visitor.tags) {
+            if (!this.tags.get(tag)) {
+                this.tags.set(tag, []);
+            }
+            this.tags.get(tag).push(visitor.tags[tag]);
+        }
     }
 }
 //# sourceMappingURL=Comment.js.map
