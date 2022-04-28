@@ -51,7 +51,7 @@ class Parser {
         if (router.length !== 0) {
             for (let match of router) {
                 let method = match[1];
-                let url = new Url(match[2]);
+                let url = new Url(match[2].split(',')[0]);
                 res.push(new Rout(method, url, match.index));
             }
         }
