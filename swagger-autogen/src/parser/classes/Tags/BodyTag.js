@@ -10,6 +10,7 @@ module.exports = class BodyTag extends BaseTag {
         }
     }
     getContent() {
+        return;
     }
 }
 //# sourceMappingURL=BodyTag.js.map

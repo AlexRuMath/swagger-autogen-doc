@@ -4,5 +4,10 @@ module.exports = class SummaryTag extends BaseTag {
         super("summary");
         this.content = content;
     }
+
+    getContent()
+    {
+        return this.content;
+    }
 }
 //# sourceMappingURL=SummaryTag.js.map

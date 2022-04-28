@@ -10,6 +10,7 @@ module.exports = class ParamTag extends BaseTag {
         }
     }
     getContent() {
+        return;
     }
 }
 //# sourceMappingURL=ParamTag.js.map

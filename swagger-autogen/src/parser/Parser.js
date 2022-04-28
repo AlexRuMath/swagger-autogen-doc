@@ -22,6 +22,9 @@ class Parser {
     }
     readAllFilesFromFolder(dir) {
         let results = [];
+
+        if(dir.match('node_modules')) return results;
+
         let files = fs.readdirSync(dir);
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
