@@ -1,8 +1,11 @@
 const Path = require("./schemes/path");
 const fs = require("fs");
-const { runInThisContext } = require("vm");
 const parseSummary = require("./strategies/parse-summary");
 const parseTags = require("./strategies/parse-tags")
+const parseDescription = require("./strategies/parse-description");
+const parse = require("nodemon/lib/cli/parse");
+const parseResponses = require("./strategies/parse-responses");
+
 
 
 class SwaggerSchemeGenerator {
@@ -15,12 +18,11 @@ class SwaggerSchemeGenerator {
 
     }
 
-    addTags(tag)
-    {
+    addTags(tag) {
         this.swaggerDoc.tags.push({
             name: tag.name,
             description: tag.content
-        })       
+        })
     }
 
     generatePaths(paths) {
@@ -38,33 +40,25 @@ class SwaggerSchemeGenerator {
                 if (rout.comment) {
                     let comment = rout.comment.tags;
 
-                    if(comment.tags)
-                    {
-                        obj.tags = [comment.tags[0].name];//TODO
+                    if (comment.tags) {
+                        parseTags(obj, comment.tags);
                         if (comment.tags[0].content)
                             this.addTags(comment.tags[0]);
                     }
 
-                    if(comment.summary)
-                    {
+                    if (comment.summary) {
                         parseSummary(comment.summary, obj);
                     }
 
-                    if(comment.description)
-                    {
-                        let remarks = comment.description.reduce((disc, remarks) => disc + remarks.getContent(), "");
-                        obj.description = remarks;
+                    if (comment.description) {
+                        parseDescription(obj, comment.description);
                     }
 
-                    if(comment.responses)
-                    {
-                        comment.responses.map((response) => {
-                            obj.responses[response.code] = {};
-                            obj.responses[response.code]["description"] = response.content;
-                        });
+                    if (comment.responses) {
+                        parseResponses(obj, comment.responses);
                     }
 
-                    
+
                 }
                 this.paths[key][rout.method] = { ...obj };
             })
