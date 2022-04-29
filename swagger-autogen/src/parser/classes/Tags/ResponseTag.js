@@ -1,16 +1,15 @@
 const parseAttrb = require("./../../../utils/parse-attrubute")
 
 module.exports = class ResponseTag {
-    constructor(content, code) {
+    constructor(content, params) {
         this.content = content;
-        this.code = parseInt(parseAttrb(code)[0]);
-        this.name = this.code.toString();
+        this.params = parseAttrb(params);
     }
 
     getContent()
     {
         let result = {};
-        result[this.code] = {
+        result[this.params.code] = {
             "description": this.content
         }
 

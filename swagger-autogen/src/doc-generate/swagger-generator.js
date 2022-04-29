@@ -3,18 +3,20 @@ const fs = require("fs");
 const parseSummary = require("./strategies/parse-summary");
 const parseTags = require("./strategies/parse-tags")
 const parseDescription = require("./strategies/parse-description");
-const parse = require("nodemon/lib/cli/parse");
 const parseResponses = require("./strategies/parse-responses");
 const parseBody = require("./strategies/parse-body");
+const parseParameters = require("./strategies/parse-parameters");
 
 
 
 class SwaggerSchemeGenerator {
-    constructor(openApi) {
+    constructor(openApi, paths, schemes) {
         this.swaggerDoc = { ...openApi };
         this.swaggerDoc.produces = ["application/json", "application/xml"],
         this.swaggerDoc.consumes = ["application/json", "application/xml"],
         this.swaggerDoc.tags = [];
+
+        this.generateDoc(paths, schemes);
     }
 
     addTags(tag) {
@@ -54,9 +56,8 @@ class SwaggerSchemeGenerator {
                         parseSummary(obj, comment.summary);
                     }
 
-
-                    if (comment.params) {
-                        console.log(comment.params);
+                    if (comment.parameters) {
+                        parseParameters(obj, comment.parameters);
                     }
 
                     if (comment.body) {
@@ -86,9 +87,12 @@ class SwaggerSchemeGenerator {
         return this.swaggerDoc;
     }
 
-    writeDoc() {
+    writeDoc(pathToFile) {
         let json = JSON.stringify(this.swaggerDoc);
-        fs.writeFileSync("swagger.json", json);
+        let path = pathToFile + "/swagger.json";
+        fs.writeFileSync(path, json);
+
+        return this.swaggerDoc;
     }
 }
 

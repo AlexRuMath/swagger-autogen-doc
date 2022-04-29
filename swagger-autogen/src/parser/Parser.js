@@ -7,6 +7,7 @@ const j2s = require("joi-to-swagger");
 class Parser {
     constructor() {
         this._regexRouter = /\.(get|post|delete|put)\('(\/.*)*'/g;
+        this.schemes = {};
     }
     parse(dir) {
         let res = new Map();
@@ -20,7 +21,7 @@ class Parser {
             res.get(path).push(rout);
         }
 
-        return res;
+        return [res, this.schemes];
     }
     readAllFilesFromFolder(dir) {
         let results = [];
@@ -81,7 +82,6 @@ class Parser {
 
     getSchemes(dir) {
         let schemes = fs.readdirSync(dir);
-        this.schemes = {};
         
         for(let i = 0; i < schemes.length; i++)
         {
