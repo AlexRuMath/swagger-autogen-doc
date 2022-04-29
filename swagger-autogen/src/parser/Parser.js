@@ -85,6 +85,8 @@ class Parser {
         
         for(let i = 0; i < schemes.length; i++)
         {
+            if(schemes[i] === "index.js") continue;
+
             const scheme = require(dir + "/" + schemes[i]);
             const name_scheme = schemes[i].split('.')[0];
             const swagger_scheme = j2s(scheme).swagger;

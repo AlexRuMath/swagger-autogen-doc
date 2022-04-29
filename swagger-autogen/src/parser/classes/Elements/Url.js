@@ -1,6 +1,6 @@
 module.exports = class Url {
     constructor(path) {
-        this.path = path;
+        this.path = path.replace("'", "");
         this.params = [];
         this._getParamFromPath();
     }
