@@ -28,7 +28,7 @@
                         "in": "body",
                         "name": "user",
                         "description": "",
-                        "required": true,
+                        "required": "true",
                         "schema": {
                             "$ref": "#/definitions/user"
                         }
@@ -38,7 +38,7 @@
                     "200": {
                         "description": "OK"
                     },
-                    "500": {
+                    "NaN": {
                         "description": "Return 500 if not all right"
                     }
                 }

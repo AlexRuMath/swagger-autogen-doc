@@ -1,9 +1,9 @@
-const BaseTag = require("./BaseTag.js");
-module.exports = class ResponseTag extends BaseTag {
+const parseAttrb = require("./../../../utils/parse-attrubute")
+
+module.exports = class ResponseTag {
     constructor(content, code) {
-        super("");
         this.content = content;
-        this.code = parseInt(code[0].getText().split('=')[1].replace(/"/g, ''));
+        this.code = parseInt(parseAttrb(code)[0]);
         this.name = this.code.toString();
     }
 

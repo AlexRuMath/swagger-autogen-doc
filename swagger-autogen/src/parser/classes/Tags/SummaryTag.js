@@ -1,7 +1,5 @@
-const BaseTag = require("./BaseTag.js");
-module.exports = class SummaryTag extends BaseTag {
+module.exports = class SummaryTag {
     constructor(content) {
-        super("summary");
         this.content = content;
     }
 
