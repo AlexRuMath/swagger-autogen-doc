@@ -2,6 +2,7 @@ const fs = require('fs');
 const Rout = require('./classes/Elements/Rout.js');
 const Url = require('./classes/Elements/Url.js');
 const Comment = require("./classes/Elements/Comment.js");
+const j2s = require("joi-to-swagger");
 
 class Parser {
     constructor() {
@@ -18,12 +19,17 @@ class Parser {
             }
             res.get(path).push(rout);
         }
+
         return res;
     }
     readAllFilesFromFolder(dir) {
         let results = [];
+        let curDir = dir.split('/').pop();
 
-        if(dir.match('node_modules')) return results;
+        if (curDir.match('node_modules')) return results;
+        if (curDir.match('swagger')) {
+            this.getSchemes(dir);
+        }
 
         let files = fs.readdirSync(dir);
         for (let i = 0; i < files.length; i++) {
@@ -72,6 +78,20 @@ class Parser {
         }
         return res;
     }
+
+    getSchemes(dir) {
+        let schemes = fs.readdirSync(dir);
+        this.schemes = {};
+        
+        for(let i = 0; i < schemes.length; i++)
+        {
+            const scheme = require(dir + "/" + schemes[i]);
+            const name_scheme = schemes[i].split('.')[0];
+            const swagger_scheme = j2s(scheme).swagger;
+            this.schemes[name_scheme] = swagger_scheme;
+        }
+    }
+
     concatCommentAndRout(element, comments) {
         let res = [];
         let abs = Math.abs;

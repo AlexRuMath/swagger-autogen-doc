@@ -2,11 +2,16 @@ const BaseTag = require("./BaseTag.js");
 module.exports = class BodyTag extends BaseTag {
     constructor(data, params) {
         super("body");
-        if (params.length !== 0) {
-            this.params = params[0].getText().split('=')[1];
-        }
-        else {
-            this.scheme = JSON.parse(data);
+        this.content = data
+        this.param = {};
+        for (let i = 0; i < params.length; i++) {
+            let [key, value] = params[i].getText().split('=');
+            if (key === "required") {
+                this.param[key] = new Boolean(value.substr(1, value.length - 2));
+            } else {
+                this.param[key] = value.substr(1, value.length - 2);
+            }
+
         }
     }
     getContent() {

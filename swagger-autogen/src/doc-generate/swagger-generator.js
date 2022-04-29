@@ -5,17 +5,16 @@ const parseTags = require("./strategies/parse-tags")
 const parseDescription = require("./strategies/parse-description");
 const parse = require("nodemon/lib/cli/parse");
 const parseResponses = require("./strategies/parse-responses");
+const parseBody = require("./strategies/parse-body");
 
 
 
 class SwaggerSchemeGenerator {
     constructor(openApi) {
         this.swaggerDoc = { ...openApi };
+        this.swaggerDoc.produces = ["application/json", "application/xml"],
+        this.swaggerDoc.consumes = ["application/json", "application/xml"],
         this.swaggerDoc.tags = [];
-    }
-
-    searchScheme() {
-
     }
 
     addTags(tag) {
@@ -25,7 +24,7 @@ class SwaggerSchemeGenerator {
         })
     }
 
-    generatePaths(paths) {
+    generateDoc(paths, schemes) {
         this.paths = {};
 
         paths.forEach((path, key) => {
@@ -34,7 +33,12 @@ class SwaggerSchemeGenerator {
                 let obj = {
                     "summary": "",
                     "description": "",
-                    "responses": {}
+                    "parameters": [],
+                    "responses": {
+                        "200": {
+                            "description": "OK"
+                        }
+                    }
                 };
 
                 if (rout.comment) {
@@ -45,9 +49,18 @@ class SwaggerSchemeGenerator {
                         if (comment.tags[0].content)
                             this.addTags(comment.tags[0]);
                     }
-
+                    
                     if (comment.summary) {
-                        parseSummary(comment.summary, obj);
+                        parseSummary(obj, comment.summary);
+                    }
+
+
+                    if (comment.params) {
+                        console.log(comment.params);
+                    }
+
+                    if (comment.body) {
+                        parseBody(obj, comment.body);
                     }
 
                     if (comment.description) {
@@ -57,14 +70,16 @@ class SwaggerSchemeGenerator {
                     if (comment.responses) {
                         parseResponses(obj, comment.responses);
                     }
-
-
                 }
                 this.paths[key][rout.method] = { ...obj };
             })
         });
 
         this.swaggerDoc["paths"] = { ...this.paths };
+        if (schemes)
+        {
+            this.swaggerDoc.definitions = {...schemes}
+        }
     }
 
     getDoc() {
