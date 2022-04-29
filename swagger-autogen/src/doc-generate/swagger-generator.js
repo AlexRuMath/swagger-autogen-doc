@@ -13,8 +13,8 @@ class SwaggerSchemeGenerator {
     constructor(openApi, paths, schemes) {
         this.swaggerDoc = { ...openApi };
         this.swaggerDoc.produces = ["application/json", "application/xml"],
-        this.swaggerDoc.consumes = ["application/json", "application/xml"],
-        this.swaggerDoc.tags = [];
+            this.swaggerDoc.consumes = ["application/json", "application/xml"],
+            this.swaggerDoc.tags = [];
 
         this.generateDoc(paths, schemes);
     }
@@ -51,7 +51,7 @@ class SwaggerSchemeGenerator {
                         if (comment.tags[0].content)
                             this.addTags(comment.tags[0]);
                     }
-                    
+
                     if (comment.summary) {
                         parseSummary(obj, comment.summary);
                     }
@@ -77,9 +77,8 @@ class SwaggerSchemeGenerator {
         });
 
         this.swaggerDoc["paths"] = { ...this.paths };
-        if (schemes)
-        {
-            this.swaggerDoc.definitions = {...schemes}
+        if (schemes) {
+            this.swaggerDoc.definitions = { ...schemes }
         }
     }
 

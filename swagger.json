@@ -1,1 +1,97 @@
-{"swagger":"2.0","info":{"title":"API on Express","version":"1.0.0","description":""},"schemes":["http","https"],"produces":["application/json","application/xml"],"consumes":["application/json","application/xml"],"tags":[],"paths":{"/index":{"post":{"summary":"\nShort description API\n","description":"\nLong description API\n","parameters":[{"in":"query","name":"test","description":"Test param","required":true},{"in":"body","name":"user","description":"","required":"true","schema":{"$ref":"#/definitions/user"}}],"responses":{"200":{"description":"OK"},"500":{"description":"Return 500 if not all right"}}}},"/users":{"get":{"summary":"","description":"","parameters":[],"responses":{"200":{"description":"OK"}}},"post":{"summary":"","description":"","parameters":[],"responses":{"200":{"description":"OK"}}}}},"definitions":{"user":{"type":"object","properties":{"name":{"type":"string","example":"Alex"},"email":{"type":"string","format":"email","example":"test@mail.ru"}},"required":["name"],"additionalProperties":false}}}
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API on Express",
+        "version": "1.0.0",
+        "description": ""
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "produces": [
+        "application/json",
+        "application/xml"
+    ],
+    "consumes": [
+        "application/json",
+        "application/xml"
+    ],
+    "tags": [],
+    "paths": {
+        "/index/{test}": {
+            "post": {
+                "summary": "\nShort description API\n",
+                "description": "\nLong description API\n",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "test",
+                        "description": "Test param",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Return 500 if not all right"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "user": {
+            "required": [
+                "name"
+            ],
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Alex"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "test@mail.ru"
+                }
+            },
+            "additionalProperties": false
+        }
+    }
+}

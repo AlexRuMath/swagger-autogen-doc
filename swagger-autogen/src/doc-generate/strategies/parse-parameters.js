@@ -6,6 +6,7 @@ module.exports = (obj, parameters) => {
             name: parameter.param.name || "body",
             description: parameter.content,
             required: parameter.param.required || "false",
+            type: parameter.param.type || "string"
         })
     })
 }

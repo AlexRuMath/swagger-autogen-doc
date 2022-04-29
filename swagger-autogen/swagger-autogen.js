@@ -1,6 +1,7 @@
 const Parser = require('./src/parser/Parser');
 const SwaggerSchemeGenerator = require('./src/doc-generate/swagger-generator');
 const swaggerUI = require('swagger-ui-express');
+const joi = require("joi");
 
 class SwaggerAutogen {
     constructor(app, dir) {
@@ -22,6 +23,8 @@ class SwaggerAutogen {
 
         this.pathToSwaggerDoc = '.';
         this.url = '/api-docs';
+        
+        this.validate = {};
     }
 
     set OpenApi(scheme)
