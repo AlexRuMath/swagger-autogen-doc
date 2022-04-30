@@ -48,6 +48,20 @@ class SwaggerSchemeGenerator {
                     })
                 }
 
+                if (rout.method === "post" || rout.method === "put" || rout.method === "patch")
+                {
+                    obj.parameters.push({
+                        in: "body",
+                        name: "body",
+                        description: "",
+                        required: "true",
+                        schema: {
+                            type: "object",
+                            properties: {}
+                        }
+                    })
+                }
+
                 if (rout.comment) {
                     let comment = rout.comment.tags;
 
