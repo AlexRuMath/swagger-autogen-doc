@@ -1,5 +1,5 @@
 module.exports = class SummaryTag {
-    constructor(content) {
+    constructor(content, params) {
         this.content = content;
     }
 

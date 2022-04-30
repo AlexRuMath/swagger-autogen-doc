@@ -1,4 +1,4 @@
-const parseAttrb = require("./../../../utils/parse-attrubute")
+const parseAttrb = require("../../../utils/parse-attrubute")
 
 module.exports = class ResponseTag {
     constructor(content, params) {

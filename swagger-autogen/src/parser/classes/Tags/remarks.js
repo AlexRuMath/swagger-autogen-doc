@@ -1,5 +1,5 @@
 module.exports = class RemarksTag {
-    constructor(content) {
+    constructor(content, params) {
         this.content = content;
     }
     getContent() {
