@@ -1,12 +1,5 @@
-const Path = require("./schemes/path");
 const fs = require("fs");
-const parseSummary = require("./strategies/parse-summary");
-const parseTags = require("./strategies/parse-tags")
-const parseDescription = require("./strategies/parse-description");
-const parseResponses = require("./strategies/parse-responses");
-const parseBody = require("./strategies/parse-body");
-const parseParameters = require("./strategies/parse-parameters");
-
+const parseStrategies = require("./strategies");
 
 
 class SwaggerSchemeGenerator {
@@ -46,30 +39,11 @@ class SwaggerSchemeGenerator {
                 if (rout.comment) {
                     let comment = rout.comment.tags;
 
-                    if (comment.tags) {
-                        parseTags(obj, comment.tags);
-                        if (comment.tags[0].content)
-                            this.addTags(comment.tags[0]);
-                    }
-
-                    if (comment.summary) {
-                        parseSummary(obj, comment.summary);
-                    }
-
-                    if (comment.parameters) {
-                        parseParameters(obj, comment.parameters);
-                    }
-
-                    if (comment.body) {
-                        parseBody(obj, comment.body);
-                    }
-
-                    if (comment.description) {
-                        parseDescription(obj, comment.description);
-                    }
-
-                    if (comment.responses) {
-                        parseResponses(obj, comment.responses);
+                    for(let [tag_name, tag] of Object.entries(comment))
+                    {
+                        parseStrategies[tag_name](obj, tag);
+                        if (tag_name === "tags" && tag[0].content)
+                            this.addTags(tag[0].content);
                     }
                 }
                 this.paths[key][rout.method] = { ...obj };
