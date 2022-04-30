@@ -36,11 +36,22 @@ class SwaggerSchemeGenerator {
                     }
                 };
 
+                if (rout.url.params.length !== 0) {
+                    rout.url.params.forEach((param) => {
+                        obj.parameters.push({
+                            in: "query",
+                            name: param || "query",
+                            description: "",
+                            required: "true",
+                            type: "string"
+                        })
+                    })
+                }
+
                 if (rout.comment) {
                     let comment = rout.comment.tags;
 
-                    for(let [tag_name, tag] of Object.entries(comment))
-                    {
+                    for (let [tag_name, tag] of Object.entries(comment)) {
                         parseStrategies[tag_name](obj, tag);
                         if (tag_name === "tags" && tag[0].content)
                             this.addTags(tag[0].content);
