@@ -42,7 +42,7 @@ class SwaggerSchemeGenerator {
                     rout.url.params.forEach((param) => {
                         obj.parameters.push({
                             in: "query",
-                            name: param || "query",
+                            name: param.name || "query",
                             description: "",
                             required: "true",
                             type: "string"
