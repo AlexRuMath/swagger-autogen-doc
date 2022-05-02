@@ -1,7 +1,10 @@
 class Options {
-    constructor(options) {
+    constructor(options, dir) {
+        this.absolutePath = dir;
         this.pathDoc = "./swagger.json";
         this.docApi = '/api-docs';
+        this.pathToFolderWithApi = dir;
+        this.pathToFolderWithSchemes = null;
         this.url = {
             templateRout: "/api/:version/:controller/:resources+",
             groupBy: "controller",
