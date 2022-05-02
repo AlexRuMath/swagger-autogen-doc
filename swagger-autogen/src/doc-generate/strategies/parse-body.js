@@ -10,8 +10,6 @@ module.exports = (obj, bodies) => {
     {
         parameter.schema = {
             "$ref": '#/definitions/' + body.param.schema
-        }
+        };
     }
-
-    obj.parameters.push(parameter);
 }
