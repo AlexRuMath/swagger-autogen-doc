@@ -5,10 +5,9 @@ const swaggerUI = require('swagger-ui-express');
 const joi = require("joi");
 
 class SwaggerAutogen {
-    constructor(app, dir, options) {
+    constructor(app, options) {
         this.options = options;
         this.app = app;
-        this.dir = dir;
         this.parser = new Parser(this.options);
         this.openapi = {
             swagger: '2.0',
@@ -44,7 +43,7 @@ class SwaggerAutogen {
 
     Use()
     {
-        let [routs, schemes] = this.parser.parse(this.dir);
+        let [routs, schemes] = this.parser.parse(this.options.pathToFolderWithApi);
         let docGenerate = new SwaggerSchemeGenerator(this.openapi, routs, schemes, this.options);
         let swaggerDoc = docGenerate.writeDoc(this.pathToSwaggerDoc);
 
@@ -53,6 +52,6 @@ class SwaggerAutogen {
 }
 
 module.exports = (app, dir, options=null) => {
-    options = new Options(options);
-    return new SwaggerAutogen(app, dir, options);
+    options = new Options(options, dir);
+    return new SwaggerAutogen(app, options);
 }
