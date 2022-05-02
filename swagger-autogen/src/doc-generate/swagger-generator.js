@@ -3,7 +3,8 @@ const parseStrategies = require("./strategies");
 
 
 class SwaggerSchemeGenerator {
-    constructor(openApi, paths, schemes) {
+    constructor(openApi, paths, schemes, options) {
+        this.options = options;
         this.swaggerDoc = { ...openApi };
         this.swaggerDoc.produces = ["application/json", "application/xml"],
             this.swaggerDoc.consumes = ["application/json", "application/xml"],
@@ -26,6 +27,7 @@ class SwaggerSchemeGenerator {
             this.paths[key] = {};
             path.forEach((rout) => {
                 let obj = {
+                    "tags": [rout.url.controller],
                     "summary": "",
                     "description": "",
                     "parameters": [],
@@ -87,7 +89,7 @@ class SwaggerSchemeGenerator {
 
     writeDoc(pathToFile) {
         let json = JSON.stringify(this.swaggerDoc);
-        let path = pathToFile + "/swagger.json";
+        let path = this.options.pathDoc;
         fs.writeFileSync(path, json);
 
         return this.swaggerDoc;
