@@ -5,7 +5,8 @@ const Comment = require("./classes/Elements/Comment.js");
 const j2s = require("joi-to-swagger");
 
 class Parser {
-    constructor() {
+    constructor(options) {
+        this.options = options;
         this._regexRouter = /\.(get|post|delete|put)\('(\/.*)*'/g;
         this.schemes = {};
     }
@@ -43,7 +44,7 @@ class Parser {
             else {
                 let text = fs.readFileSync(file, 'utf-8');
                 let comments = this.getComments(text);
-                let routs = this.getRouts(text);
+                let routs = this.getRouts(text, dir);
                 if (routs.length !== 0) {
                     let components = this.concatCommentAndRout(routs, comments);
                     results = results.concat(components);
@@ -52,13 +53,14 @@ class Parser {
         }
         return results;
     }
-    getRouts(text) {
+    getRouts(text, dir) {
         let router = text.matchAll(this._regexRouter);
         let res = [];
         if (router.length !== 0) {
             for (let match of router) {
                 let method = match[1];
-                let url = new Url(match[2].split(',')[0]);
+                let controller = dir.split('/');
+                let url = new Url(match[2].split(',')[0], this.options);
                 res.push(new Rout(method, url, match.index));
             }
         }

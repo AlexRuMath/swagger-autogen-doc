@@ -1,13 +1,15 @@
 const Parser = require('./src/parser/Parser');
 const SwaggerSchemeGenerator = require('./src/doc-generate/swagger-generator');
+const Options = require("./src/common/options");
 const swaggerUI = require('swagger-ui-express');
 const joi = require("joi");
 
 class SwaggerAutogen {
-    constructor(app, dir) {
+    constructor(app, dir, options) {
+        this.options = options;
         this.app = app;
         this.dir = dir;
-        this.parser = new Parser();
+        this.parser = new Parser(this.options);
         this.openapi = {
             swagger: '2.0',
             info: {
@@ -52,6 +54,7 @@ class SwaggerAutogen {
     }
 }
 
-module.exports = (app, dir) => {
-    return new SwaggerAutogen(app, dir);
+module.exports = (app, dir, options=null) => {
+    options = new Options(options);
+    return new SwaggerAutogen(app, dir, options);
 }
