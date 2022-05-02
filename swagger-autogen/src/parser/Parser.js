@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require("path");
 const Rout = require('./classes/Elements/Rout.js');
 const Url = require('./classes/Elements/Url.js');
 const Comment = require("./classes/Elements/Comment.js");
@@ -8,7 +9,7 @@ class Parser {
     constructor(options) {
         this.options = options;
         this._regexRouter = /\.(get|post|delete|put)\('(\/.*)*'/g;
-        this.schemes = {};
+        this.schemes = this.options.pathToFolderWithSchemes ? this.getSchemes(this.options.pathToFolderWithSchemes) : {};
     }
     parse(dir) {
         let res = new Map();
@@ -29,7 +30,7 @@ class Parser {
         let curDir = dir.split('/').pop();
 
         if (curDir.match('node_modules')) return results;
-        if (curDir.match('swagger')) {
+        if (curDir.match('swagger') && Object.keys(this.schemes).length > 0) {
             this.getSchemes(dir);
         }
 
@@ -59,7 +60,6 @@ class Parser {
         if (router.length !== 0) {
             for (let match of router) {
                 let method = match[1];
-                let controller = dir.split('/');
                 let url = new Url(match[2].split(',')[0], this.options);
                 res.push(new Rout(method, url, match.index));
             }
@@ -89,7 +89,8 @@ class Parser {
         {
             if(schemes[i] === "index.js") continue;
 
-            const scheme = require(dir + "/" + schemes[i]);
+            let pathToScheme = path.isAbsolute(dir) ? dir : this.options.absolutePath + dir.slice(1) + "/"
+            const scheme = require(pathToScheme + schemes[i]);
             const name_scheme = schemes[i].split('.')[0];
             const swagger_scheme = j2s(scheme).swagger;
             this.schemes[name_scheme] = swagger_scheme;
