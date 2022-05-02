@@ -5,5 +5,12 @@ module.exports = (obj, parameters) => {
         param.description = parameter.content || "";
         param.required = parameter.param.required || "true";
         param.type = parameter.param.type || "string";
+
+        if(param.type === "array")
+        {
+            param.items = {
+                type: "string",
+            }
+        }
     })
 }
