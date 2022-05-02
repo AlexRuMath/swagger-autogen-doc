@@ -30,7 +30,7 @@ class Parser {
         let curDir = dir.split('/').pop();
 
         if (curDir.match('node_modules')) return results;
-        if (curDir.match('swagger') && Object.keys(this.schemes).length > 0) {
+        if (curDir.match('swagger') && Object.keys(this.schemes).length === 0) {
             this.getSchemes(dir);
         }
 
@@ -45,7 +45,7 @@ class Parser {
             else {
                 let text = fs.readFileSync(file, 'utf-8');
                 let comments = this.getComments(text);
-                let routs = this.getRouts(text, dir);
+                let routs = this.getRouts(text, file);
                 if (routs.length !== 0) {
                     let components = this.concatCommentAndRout(routs, comments);
                     results = results.concat(components);
@@ -54,14 +54,15 @@ class Parser {
         }
         return results;
     }
-    getRouts(text, dir) {
+    getRouts(text, file) {
         let router = text.matchAll(this._regexRouter);
         let res = [];
         if (router.length !== 0) {
             for (let match of router) {
                 let method = match[1];
                 let url = new Url(match[2].split(',')[0], this.options);
-                res.push(new Rout(method, url, match.index));
+                let filename = file.split('/').pop().replace('.js', '');
+                res.push(new Rout(method, url, match.index, filename));
             }
         }
         return res;

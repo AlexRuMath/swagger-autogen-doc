@@ -6,9 +6,9 @@ class SwaggerSchemeGenerator {
     constructor(openApi, paths, schemes, options) {
         this.options = options;
         this.swaggerDoc = { ...openApi };
-        this.swaggerDoc.produces = ["application/json", "application/xml"],
-            this.swaggerDoc.consumes = ["application/json", "application/xml"],
-            this.swaggerDoc.tags = [];
+        this.swaggerDoc.produces = ["application/json", "application/xml"];
+        this.swaggerDoc.consumes = ["application/json", "application/xml"];
+        this.swaggerDoc.tags = [];
 
         this.generateDoc(paths, schemes);
     }
@@ -38,7 +38,7 @@ class SwaggerSchemeGenerator {
                     }
                 };
 
-                if (rout.url.params.length !== 0) {
+                if (rout.url.params) {
                     rout.url.params.forEach((param) => {
                         obj.parameters.push({
                             in: "query",
@@ -50,9 +50,9 @@ class SwaggerSchemeGenerator {
                     })
                 }
 
-                if (rout.method === "post" || rout.method === "put" || rout.method === "patch")
-                {
-                    obj.parameters.push({
+                if (rout.method === "post" || rout.method === "put" || rout.method === "patch") {
+                    let schema = schemes[rout.filename];
+                    let body = {
                         in: "body",
                         name: "body",
                         description: "",
@@ -61,7 +61,13 @@ class SwaggerSchemeGenerator {
                             type: "object",
                             properties: {}
                         }
-                    })
+                    };
+                    if (schema) {
+                        body.schema = {
+                            "$ref": '#/definitions/' + rout.filename
+                        } 
+                    }
+                    obj.parameters.push(body);
                 }
 
                 if (rout.comment) {
