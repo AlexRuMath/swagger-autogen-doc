@@ -24,9 +24,7 @@ class SwaggerAutogen {
         }
 
         this.pathToSwaggerDoc = '.';
-        this.url = '/api-docs';
-        
-        this.validate = {};
+        this.url = this.options.docApi;        
     }
 
     set OpenApi(scheme)
@@ -47,7 +45,7 @@ class SwaggerAutogen {
     Use()
     {
         let [routs, schemes] = this.parser.parse(this.dir);
-        let docGenerate = new SwaggerSchemeGenerator(this.openapi, routs, schemes);
+        let docGenerate = new SwaggerSchemeGenerator(this.openapi, routs, schemes, this.options);
         let swaggerDoc = docGenerate.writeDoc(this.pathToSwaggerDoc);
 
         this.app.use(this.url, swaggerUI.serve, swaggerUI.setup(swaggerDoc));
