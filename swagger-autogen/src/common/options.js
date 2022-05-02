@@ -5,6 +5,7 @@ class Options {
         this.docApi = '/api-docs';
         this.pathToFolderWithApi = dir;
         this.pathToFolderWithSchemes = null;
+        this.jwt = null;
         this.url = {
             templateRout: "/api/:version/:controller/:resources+",
             groupBy: "controller",

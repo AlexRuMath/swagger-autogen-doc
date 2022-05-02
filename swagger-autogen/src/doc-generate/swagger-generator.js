@@ -84,6 +84,14 @@ class SwaggerSchemeGenerator {
         });
 
         this.swaggerDoc["paths"] = { ...this.paths };
+
+        if(this.options.jwt)
+        {
+            this.swaggerDoc.securityDefinitions = {
+                JWT: this.options.jwt
+            }
+        }
+
         if (schemes) {
             this.swaggerDoc.definitions = { ...schemes }
         }
