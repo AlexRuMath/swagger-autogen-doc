@@ -3,7 +3,7 @@ module.exports = (name) => {
         in: "query",
         name: name || "query",
         description: "",
-        required: "true",
+        required: true,
         type: "string"
     }
 }

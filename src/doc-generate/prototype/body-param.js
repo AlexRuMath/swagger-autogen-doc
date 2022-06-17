@@ -3,7 +3,7 @@ module.exports = () => {
         in: "body",
         name: "body",
         description: "",
-        required: "true",
+        required: true,
         schema: {
             type: "object",
             properties: {}

@@ -3,21 +3,20 @@ const path = require("path");
 const Rout = require('./classes/Elements/Rout.js');
 const Url = require('./classes/Elements/Url.js');
 const Comment = require("./classes/Elements/Comment.js");
-const { NoFoundPair } = require("../../exceptions");
 const j2s = require("joi-to-swagger");
+const ApiRepository = require("../repositories/api-repositories");
+const SchemaRepository = require("../repositories/schem-repositories");
+const findComments = require("./find-comments");
 
 class Parser {
     constructor(options) {
         this.options = options;
         this._regexRouter = /\.(get|post|delete|put)\('(\/.*)*'/g;
-
-        if(this.options && this.options.pathToFolderWithScemes)
-        {
-            this.schemes = this.getSchemes(this.options.pathToFolderWithScemes);
-        } else {
-            this.schemes = {};
-        }
+        this._regexMethod = /\s*method\s*:\s*('get'|'post'|'delete'|'patch')/;
+        this._regexUrl = /\s*path\s*:\s*('|")(\/.*)*('|")/;
+        this._regexScheme = /validationSchema\s*:\s*/;
     }
+
     parse(dir) {
         let res = new Map();
         let routs = this.readAllFilesFromFolder(dir);
@@ -30,16 +29,14 @@ class Parser {
             res.get(path).push(rout);
         }
 
-        return [res, this.schemes];
+        return res;
     }
+
     readAllFilesFromFolder(dir) {
         let results = [];
         let curDir = dir.split('/').pop();
 
         if (curDir.match('node_modules')) return results;
-        if (curDir.match('swagger') && Object.keys(this.schemes).length === 0) {
-            this.getSchemes(dir);
-        }
 
         let files = fs.readdirSync(dir);
         for (let i = 0; i < files.length; i++) {
@@ -51,9 +48,9 @@ class Parser {
             }
             else {
                 let text = fs.readFileSync(file, 'utf-8');
-                let comments = this.getComments(text, file);
                 let routs = this.getRouts(text, file);
                 if (routs.length !== 0) {
+                    let comments = this.getComments(text, file);
                     let components = this.concatCommentAndRout(routs, comments);
                     results = results.concat(components);
                 }
@@ -61,20 +58,35 @@ class Parser {
         }
         return results;
     }
+
     getRouts(text, file) {
-        let router = text.matchAll(this._regexRouter);
+        let findMethod = this._regexMethod.exec(text);
+        let findPath = this._regexUrl.exec(text);
         let res = [];
-        if (router.length !== 0) {
-            for (let match of router) {
-                let method = match[1];
-                let endpoint = match[2].split(',')[0];
-                let filename = file.split('/').pop().replace('.js', '');
-                let url = new Url(endpoint, this.options);
-                res.push(new Rout(method, url, match.index, filename));
+        if (findMethod && findPath) {
+            let api = ApiRepository.getByPath(findPath[2]);
+            let method = api ? api.method : findMethod[1].split("'")[1];
+            let endpoint = api ? api.path : findPath[2];
+            let filename = file.split('/').pop().replace('.js', '');
+
+            if (api) {
+                if (api.validationSchema) {
+                    const swagger_scheme = j2s(api.validationSchema).swagger;
+                    SchemaRepository.add({
+                        filename: filename,
+                        schema: swagger_scheme
+                    })
+                }
+            } else {
+                console.log(`WARNING: The api in ${file} dont mark as swagger api`);
             }
+
+            let url = new Url(endpoint, this.options);
+            res.push(new Rout(method, url, findMethod.index, filename));
         }
         return res;
     }
+
     getComments(text, file) {
         let commentStartAll = [...text.matchAll(/<swagger>/g)];
         let commentEndAll = [...text.matchAll(/<\/swagger>/g)];
@@ -85,32 +97,11 @@ class Parser {
                 let startIndex = commentStartAll[i].index + commentStartAll[i][0].length;
                 let endIndex = commentEndAll[i].index;
                 let diff = endIndex - startIndex;
-
-                if(diff < 0)
-                {
-                    throw new NoFoundPair(file);
-                }
-
                 let comment = new Comment(text.substr(startIndex, diff), startIndex, endIndex);
                 res.push(comment);
             }
         }
         return res;
-    }
-
-    getSchemes(dir) {
-        let schemes = fs.readdirSync(dir);
-        
-        for(let i = 0; i < schemes.length; i++)
-        {
-            if(schemes[i] === "index.js") continue;
-
-            let pathToScheme = path.isAbsolute(dir) ? dir  : this.options.absolutePath + dir.slice(1)
-            const scheme = require(pathToScheme + "/" + schemes[i]);
-            const name_scheme = schemes[i].split('.')[0];
-            const swagger_scheme = j2s(scheme).swagger;
-            this.schemes[name_scheme] = swagger_scheme;
-        }
     }
 
     concatCommentAndRout(element, comments) {

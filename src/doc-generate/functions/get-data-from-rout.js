@@ -2,8 +2,9 @@ const parseStrategies = require("../strategies");
 const pathBodyPrototype = require("../prototype/path-body");
 const queryParamPrototype = require("../prototype/query-param");
 const bodyParamPrototype = require("../prototype/body-param");
+const SchemaRepository = require("../../repositories/schem-repositories");
 
-module.exports = (rout, schemes) => {
+module.exports = (rout) => {
     let result = {};
     let pathBody = pathBodyPrototype(rout.url.controller);
 
@@ -12,7 +13,7 @@ module.exports = (rout, schemes) => {
     })
 
     if (rout.method === "post" || rout.method === "put" || rout.method === "patch") {
-        let schema = schemes[rout.filename];
+        let schema = SchemaRepository.getByFileName(rout.filename);
         let body = bodyParamPrototype();
         if (schema) {
             body.schema = {

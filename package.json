@@ -1,25 +1,17 @@
 {
-  "name": "swagger-autogen-doc",
-  "version": "0.0.0",
-  "private": true,
+  "name": "swagger-autogen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "swagger-autogen.js",
   "scripts": {
-    "start": "node ./Express/bin/www",
-    "test": "node ./node_modules/mocha"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "antlr4": "^4.9.3",
-    "chai": "^4.3.6",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "joi": "^17.6.0",
+    "antlr4": "4.8.0",
     "joi-to-swagger": "^6.0.1",
-    "mocha": "^10.0.0",
-    "morgan": "~1.9.1",
-    "nyc": "^15.1.0",
     "path-to-regexp": "^6.2.0",
-    "pug": "2.0.0-beta11",
-    "swagger-ui-express": "^4.3.0"
-  }
+    "swagger-ui-express": "^4.4.0"
+  },
+  "author": "",
+  "license": "ISC"
 }

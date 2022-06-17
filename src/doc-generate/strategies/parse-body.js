@@ -4,7 +4,7 @@ module.exports = (obj, bodies) => {
     let parameter = obj.parameters.find(element => element.in === "body");
     parameter.name = body.param.name || "body";
     parameter.description = body.content || "";
-    parameter.required = body.param.required || "true";
+    parameter.required = body.param.required || true;
 
     if(body.param.schema)
     {

@@ -1,16 +1,17 @@
 const fs = require("fs");
 const getDataFromRout = require("./functions/get-data-from-rout");
+const SchemaRepository = require("../repositories/schem-repositories");
 
 
 class SwaggerSchemeGenerator {
-    constructor(openApi, paths, schemes, options) {
+    constructor(openApi, paths, options) {
         this.options = options;
         this.swaggerDoc = { ...openApi };
         this.swaggerDoc.produces = ["application/json", "application/xml"];
         this.swaggerDoc.consumes = ["application/json", "application/xml"];
         this.swaggerDoc.tags = [];
 
-        this.generateDoc(paths, schemes);
+        this.generateDoc(paths);
     }
 
     addTags(tag) {
@@ -20,13 +21,14 @@ class SwaggerSchemeGenerator {
         })
     }
 
-    generateDoc(paths, schemes) {
+    generateDoc(paths) {
         this.paths = {};
 
         paths.forEach((path, key) => {
             this.paths[key] = {};
             path.forEach((rout) => {
-                this.paths[key] = {...getDataFromRout(rout, schemes)}
+                let result = getDataFromRout(rout);
+                this.paths[key][rout.method] = result[rout.method]; 
             })
         });
 
@@ -39,8 +41,9 @@ class SwaggerSchemeGenerator {
             }
         }
 
+        let schemes = SchemaRepository.getAllAsJSON();
         if (schemes) {
-            this.swaggerDoc.definitions = { ...schemes }
+            this.swaggerDoc.definitions = { ...schemes };
         }
     }
 
