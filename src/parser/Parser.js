@@ -11,10 +11,11 @@ const findComments = require("./find-comments");
 class Parser {
     constructor(options) {
         this.options = options;
-        this._regexRouter = /\.(get|post|delete|put)\('(\/.*)*'/g;
+        this._regexRouter = /(get|post|delete|put)\('(\/.*)*'/g;
         this._regexMethod = /\s*method\s*:\s*('get'|'post'|'delete'|'patch')/;
         this._regexUrl = /\s*path\s*:\s*('|")(\/.*)*('|")/;
         this._regexScheme = /validationSchema\s*:\s*/;
+        this.allApi = ApiRepository.getAll();
     }
 
     parse(dir) {
@@ -36,7 +37,7 @@ class Parser {
         let results = [];
         let curDir = dir.split('/').pop();
 
-        if (curDir.match('node_modules')) return results;
+        if (curDir.match('node_modules') || curDir.match("swagger-autogen")) return results;
 
         let files = fs.readdirSync(dir);
         for (let i = 0; i < files.length; i++) {
@@ -47,6 +48,8 @@ class Parser {
                 results = results.concat(this.readAllFilesFromFolder(file));
             }
             else {
+                if(!file.match(/.js/)) continue;
+
                 let text = fs.readFileSync(file, 'utf-8');
                 let routs = this.getRouts(text, file);
                 if (routs.length !== 0) {
@@ -60,16 +63,16 @@ class Parser {
     }
 
     getRouts(text, file) {
-        let findMethod = this._regexMethod.exec(text);
-        let findPath = this._regexUrl.exec(text);
         let res = [];
-        if (findMethod && findPath) {
-            let api = ApiRepository.getByPath(findPath[2]);
-            let method = api ? api.method : findMethod[1].split("'")[1];
-            let endpoint = api ? api.path : findPath[2];
-            let filename = file.split('/').pop().replace('.js', '');
 
-            if (api) {
+        for (let i = 0; i < this.allApi.length; i++) {
+            let findApi = this.allApi[i].pathRegexp.exec(text);
+            if (findApi) {
+                let api = ApiRepository.getByPath(findApi[0]);
+                let method = api.method;
+                let endpoint = api.path;
+                let filename = file.split('/').pop().replace('.js', '');
+
                 if (api.validationSchema) {
                     const swagger_scheme = j2s(api.validationSchema).swagger;
                     SchemaRepository.add({
@@ -77,12 +80,9 @@ class Parser {
                         schema: swagger_scheme
                     })
                 }
-            } else {
-                console.log(`WARNING: The api in ${file} dont mark as swagger api`);
+                let url = new Url(endpoint, this.options);
+                res.push(new Rout(method, url, findApi.index, filename));
             }
-
-            let url = new Url(endpoint, this.options);
-            res.push(new Rout(method, url, findMethod.index, filename));
         }
         return res;
     }

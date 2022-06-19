@@ -3,6 +3,7 @@ class JWT {
         this.name = "Auth";
         this.type = "apiKey";
         this.in = "header";
+        this.description = "";
     }
 }
 

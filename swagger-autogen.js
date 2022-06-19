@@ -57,6 +57,7 @@ class SwaggerAutogen {
     }
 
     Use() {
+        ApiRepository.addFromApp(this.app);
         let routs = this.parser.parse(this.options.folderApi);
         let docGenerate = new SwaggerSchemeGenerator(this.openapi, routs, this.options);
         let swaggerDoc = docGenerate.writeDoc(this.pathToSwaggerDoc);
@@ -64,6 +65,15 @@ class SwaggerAutogen {
         this.app.use(this.url, swaggerUI.serve, swaggerUI.setup(swaggerDoc));
         console.log("The endpoint swagger docs: " + this.url);
     }
+}
+
+const swaggerSchema = function(schema, api){
+    SchemaRepository.add({
+        path: api,
+        schema: schema
+    })
+
+    return schema;
 }
 
 const swaggerApi = function (api, auth=null) {
