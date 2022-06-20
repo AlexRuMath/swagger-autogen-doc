@@ -142,3 +142,6 @@ module.exports = () => {
   * **templateRout** - шаблон endpoint. По-умолчанию равен "/api/:version/:controller/:resources+". То есть каждый endpoint будет иметь такую схему, например: '/api/v1/public/login'.
 Здесь **v1** - version, **public** - controller, **login** - resources.
   * **groupBy** - по какому из частей endpoint будет группировка. По-умолчанию "controller".
+
+## Схемы
+В данном генератора используются joi схемы для примеров параметров запроса.
