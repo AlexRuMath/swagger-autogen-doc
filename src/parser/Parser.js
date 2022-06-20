@@ -73,6 +73,7 @@ class Parser {
                 if (api.validationSchema) {
                     const swagger_scheme = j2s(api.validationSchema).swagger;
                     SchemaRepository.add({
+                        in: method === 'get' ? 'query' : 'body',
                         filename: filename,
                         schema: swagger_scheme
                     })

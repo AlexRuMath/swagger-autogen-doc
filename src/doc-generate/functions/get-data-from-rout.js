@@ -4,6 +4,33 @@ const queryParamPrototype = require("../prototype/query-param");
 const bodyParamPrototype = require("../prototype/body-param");
 const SchemaRepository = require("../../repositories/schem-repositories");
 
+const parseSchemaQuery = function(schema, filename){
+    let res = [];
+    for (let name of Object.keys(schema.schema.properties)) {
+        let object = queryParamPrototype();
+        object.name = name;
+        object.schema = {
+            "$ref": '#/definitions/' + filename
+        }
+        res.push(object);
+    }
+
+    return res;
+}
+
+const parseSchemaBody = function(schema, filename){
+    let object = bodyParamPrototype();
+    object.schema = {
+        "$ref": '#/definitions/' + filename
+    };
+
+    return [object];
+}
+
+const parseSchema = function(schema, filename){
+    return schema.in === 'query' ? parseSchemaQuery(schema, filename) : parseSchemaBody(schema, filename);
+};
+
 module.exports = (rout) => {
     let result = {};
     let pathBody = pathBodyPrototype(rout.url.controller);
@@ -12,15 +39,9 @@ module.exports = (rout) => {
         pathBody.parameters.push(queryParamPrototype(param.name));
     })
 
-    if (rout.method === "post" || rout.method === "put" || rout.method === "patch") {
-        let schema = SchemaRepository.getByFileName(rout.filename);
-        let body = bodyParamPrototype();
-        if (schema) {
-            body.schema = {
-                "$ref": '#/definitions/' + rout.filename
-            } 
-        }
-        pathBody.parameters.push(body);
+    let schema = SchemaRepository.getByFileName(rout.filename);
+    if (schema) {
+        pathBody.parameters = parseSchema(schema, rout.filename);
     }
 
     if (rout.comment) {
@@ -32,8 +53,8 @@ module.exports = (rout) => {
                 this.addTags(tag[0].content);
         }
     }
-    
-    result[rout.method] = {...pathBody}
+
+    result[rout.method] = { ...pathBody }
 
     return result;
 };
