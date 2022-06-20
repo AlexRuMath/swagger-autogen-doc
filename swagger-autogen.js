@@ -13,7 +13,7 @@ class SwaggerAutogen {
         this.app = app;
         this.parser = new Parser(this.options);
         this.pathToSwaggerDoc = options.absolutePath;
-        this.url = this.options.docApi;
+        this.url = this.options.endpointSwagger;
         this.openapi = {
             swagger: '2.0',
             info: {
