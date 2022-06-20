@@ -2,7 +2,7 @@ class Options {
     constructor(options, dir) {
         this.absolutePath = dir;
         this.pathDoc = "./swagger.json";
-        this.docApi = '/api-docs';
+        this.endpointSwagger = '/api-docs';
         this.folderApi = dir;
         this.foldersSchems = [];
         this.jwt = null;
