@@ -4,32 +4,26 @@ const queryParamPrototype = require("../prototype/query-param");
 const bodyParamPrototype = require("../prototype/body-param");
 const SchemaRepository = require("../../repositories/schem-repositories");
 
-const parseSchemaQuery = function(schema, filename){
+const parseSchema = function(schema, filename){
     let res = [];
+    let ref = { "$ref": '#/definitions/' + filename }; 
+    let isBody = schema.in === 'body';
+    
+    if(isBody){
+        let object = bodyParamPrototype();
+        object.schema = ref; 
+        res.push(object);
+        return res;
+    }
+
     for (let name of Object.keys(schema.schema.properties)) {
-        let object = queryParamPrototype();
-        object.name = name;
-        object.schema = {
-            "$ref": '#/definitions/' + filename
-        }
+        let object = queryParamPrototype(name);
+        object.schema = ref;
         res.push(object);
     }
 
     return res;
 }
-
-const parseSchemaBody = function(schema, filename){
-    let object = bodyParamPrototype();
-    object.schema = {
-        "$ref": '#/definitions/' + filename
-    };
-
-    return [object];
-}
-
-const parseSchema = function(schema, filename){
-    return schema.in === 'query' ? parseSchemaQuery(schema, filename) : parseSchemaBody(schema, filename);
-};
 
 module.exports = (rout) => {
     let result = {};
