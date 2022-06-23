@@ -30,6 +30,7 @@ _ВАЖНО!_ Вызов функции **Use()** использовать по�
 * Schemes - массив схем для запросов, по-умолчанию хранит в себе все схемы. Может включать в себя:
   * http
   * https
+
 Пример:
 ```javascript
 swagger.Title = "Test API";
@@ -142,3 +143,46 @@ module.exports = () => {
   * **templateRout** - шаблон endpoint. По-умолчанию равен "/api/:version/:controller/:resources+". То есть каждый endpoint будет иметь такую схему, например: '/api/v1/public/login'.
 Здесь **v1** - version, **public** - controller, **login** - resources.
   * **groupBy** - по какому из частей endpoint будет группировка. По-умолчанию "controller".
+
+## Авторизация
+Пример подключения авторизации:
+```javascript
+const { OptionsSwagger, Swagger, AuthTypes } = require("swagger-autogen-doc");
+
+const apiKey = new AuthTypes.ApiKeyAuth();
+apiKey.Name = "Authorization";
+
+const options = new OptionsSwagger({
+  auth: {
+    Auth: apiKey
+  }
+}, __dirname);
+let swagger = new Swagger(app, options);
+swagger.Use();
+```
+
+В объекте AuthTypes лежат прототипы методов авторизации, такие как:
+* ApiKey - имеет свойство __Name__, которое будет передаваться в заголовок запроса
+* Bearer
+* Basic
+
+После настройки выбранного объекта, необходимо подключить объект к объекту Swagger. Для этого при создании объекта **OptionsSwagger** передаем объект с полем **auth**. При добавлении объекта в это поле, имя поле будет названием схемы к которой можно будет подключать API.
+Например: 
+```javascript
+const { swaggerApi } = require("swagger-autogen-doc");
+const Joi = require('joi')
+
+module.exports = () => {
+  return swaggerApi({
+    method: 'get',
+    path: '/api/v1/public/test',
+    validationSchema: Joi.object({
+      email: Joi.string().email()
+    }),
+    handler: async function (req, _res) {
+      return res.status(200).json({message: "Hello world"});
+    }
+  }, "Auth");
+```
+
+Здесь функция **swaggerApi** принимает вторым аргументов имя схемы, которая будет использоваться для данного API.
