@@ -66,8 +66,11 @@ class SwaggerAutogen {
     }
 }
 
-const swaggerApi = function (api, auth=null) {
-    ApiRepository.add(api);
+const swaggerApi = function (api, auth=false) {
+    ApiRepository.add({
+        api: api,
+        auth: auth
+    });
     return api;
 }
 

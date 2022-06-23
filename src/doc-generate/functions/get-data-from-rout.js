@@ -3,6 +3,7 @@ const pathBodyPrototype = require("../prototype/path-body");
 const queryParamPrototype = require("../prototype/query-param");
 const bodyParamPrototype = require("../prototype/body-param");
 const SchemaRepository = require("../../repositories/schem-repositories");
+const ApiRepository = require("../../repositories/api-repositories");
 
 const parseSchema = function(schema, filename){
     let res = [];
@@ -28,6 +29,8 @@ const parseSchema = function(schema, filename){
 module.exports = (rout) => {
     let result = {};
     let pathBody = pathBodyPrototype(rout.url.controller);
+    let schemaApi = ApiRepository.getByPath(rout.url.path);
+    let auth = schemaApi ? schemaApi.auth : false;
 
     rout.url.params.forEach((param) => {
         pathBody.parameters.push(queryParamPrototype(param.name));
@@ -36,6 +39,12 @@ module.exports = (rout) => {
     let schema = SchemaRepository.getByFileName(rout.filename);
     if (schema) {
         pathBody.parameters = parseSchema(schema, rout.filename);
+    }
+
+    if(auth){
+        pathBody.security = [{
+            Auth: []
+        }]
     }
 
     if (rout.comment) {

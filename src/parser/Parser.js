@@ -66,18 +66,18 @@ class Parser {
         let findPath = this._regexUrl.exec(text);
         let res = [];
         if (findMethod && findPath) {
-            let api = ApiRepository.getByPath(findPath[2]);
-            let method = api ? api.method : findMethod[1].split("'")[1];
-            let endpoint = api ? api.path : findPath[2];
+            let schemaApi = ApiRepository.getByPath(findPath[2]);
+            let method = schemaApi ? schemaApi.api.method : findMethod[1].split("'")[1];
+            let endpoint = schemaApi ? schemaApi.api.path : findPath[2];
             let filename = file.split('/').pop().replace('.js', '');
 
-            if (api) {
-                if (api.validationSchema) {
-                    const swagger_scheme = j2s(api.validationSchema).swagger;
+            if (schemaApi) {
+                if (schemaApi.api.validationSchema) {
+                    const swagger_schema = j2s(schemaApi.api.validationSchema).swagger;
                     SchemaRepository.add({
                         in: method === 'get' ? 'query' : 'body',
                         filename: filename,
-                        schema: swagger_scheme
+                        schema: swagger_schema
                     })
                 }
             } else {
