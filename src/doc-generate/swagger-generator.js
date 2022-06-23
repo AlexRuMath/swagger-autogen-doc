@@ -36,8 +36,9 @@ class SwaggerSchemeGenerator {
 
         if(this.options.auth)
         {
-            this.swaggerDoc.securityDefinitions = {
-                Auth: this.options.auth
+            this.swaggerDoc.securityDefinitions = {}
+            for(let [name, scheme] of Object.entries(this.options.auth)){
+                this.swaggerDoc.securityDefinitions[name] = scheme;
             }
         }
 

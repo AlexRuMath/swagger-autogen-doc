@@ -30,7 +30,7 @@ module.exports = (rout) => {
     let result = {};
     let pathBody = pathBodyPrototype(rout.url.controller);
     let schemaApi = ApiRepository.getByPath(rout.url.path);
-    let auth = schemaApi ? schemaApi.auth : false;
+    let auth = schemaApi ? schemaApi.auth : null;
 
     rout.url.params.forEach((param) => {
         pathBody.parameters.push(queryParamPrototype(param.name));
@@ -42,9 +42,9 @@ module.exports = (rout) => {
     }
 
     if(auth){
-        pathBody.security = [{
-            Auth: []
-        }]
+        let securitySchema = {}
+        securitySchema[auth] = [];
+        pathBody.security.push(securitySchema);
     }
 
     if (rout.comment) {

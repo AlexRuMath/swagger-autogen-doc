@@ -1,11 +1,13 @@
 const Parser = require('./src/parser/Parser');
 const SwaggerSchemeGenerator = require('./src/doc-generate/swagger-generator');
 const Options = require("./src/common/options");
-const JWT = require("./src/auth/JWT");
+const BasicAuth = require('./src/auth/prototypes/BasicAuth');
+const BearerAuth = require('./src/auth/prototypes/BearerAuth');
+const ApiKeyAuth = require('./src/auth/prototypes/ApiKeyAuth');
 const swaggerUI = require('swagger-ui-express');
 const ApiRepository = require('./src/repositories/api-repositories');
 const SchemaRepository = require('./src/repositories/schem-repositories');
-const AuthTypes = require('./src/auth/types');
+
 
 class SwaggerAutogen {
     constructor(app, options) {
@@ -66,7 +68,7 @@ class SwaggerAutogen {
     }
 }
 
-const swaggerApi = function (api, auth=false) {
+const swaggerApi = function (api, auth=null) {
     ApiRepository.add({
         api: api,
         auth: auth
@@ -78,6 +80,9 @@ module.exports = {
     swaggerApi: swaggerApi,
     Swagger: SwaggerAutogen,
     OptionsSwagger: Options,
-    JWT: JWT,
-    AuthTypes: AuthTypes
+    AuthTypes: {
+        BasicAuth,
+        BearerAuth,
+        ApiKeyAuth
+    }
 };
