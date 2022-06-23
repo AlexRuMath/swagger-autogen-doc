@@ -47,6 +47,8 @@ class Parser {
                 results = results.concat(this.readAllFilesFromFolder(file));
             }
             else {
+                if(!file.match(/.js/)) continue;
+
                 let text = fs.readFileSync(file, 'utf-8');
                 let routs = this.getRouts(text, file);
                 if (routs.length !== 0) {
