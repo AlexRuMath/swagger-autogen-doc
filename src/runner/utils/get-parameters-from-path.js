@@ -15,6 +15,8 @@ module.exports = (parameters, swaggerDoc) => {
             parameter.object = new DataGen().generateObject(swaggerDoc.definitions[schemaName]);
             parameter.schema = schemaName;
         }
+
+        res.push(parameter);
     }
 
     return res;
