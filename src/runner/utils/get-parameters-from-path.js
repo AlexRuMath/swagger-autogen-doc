@@ -1,22 +1,26 @@
 const ApiParameters = require("../api/api-parameters");
 const DataGen = require("../DataGen");
 
+const keys = {
+    'params': { params: {} },
+    'data': { data: {} },
+}
+
 module.exports = (parameters, swaggerDoc) => {
-    let res = [];
+    let res = new ApiParameters();
+
     for (let i = 0; i < parameters.length; i++) {
-        let parameter = new ApiParameters();
-
-        parameter.in = parameters[i].in;
-        parameter.name = parameters[i].name;
-
-        let schema = parameters[i].schema;
-        if (schema) {
-            let schemaName = schema.$ref.split("/").pop();
-            parameter.object = new DataGen().generateObject(swaggerDoc.definitions[schemaName]);
-            parameter.schema = schemaName;
+        let key = "";
+        if (parameters[i].in === 'query') {
+            key = 'params';
+            res.example = keys[key];
+        } else {
+            key = 'data';
+            res.example = keys[key];
         }
-
-        res.push(parameter);
+        let schema = parameters[i].schema;
+        let schemaName = schema.$ref.split("/").pop();
+        res.example[key] = { ...new DataGen().generateObject(swaggerDoc.definitions[schemaName]) };
     }
 
     return res;
