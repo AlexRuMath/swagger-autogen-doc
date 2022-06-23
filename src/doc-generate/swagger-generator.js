@@ -34,10 +34,10 @@ class SwaggerSchemeGenerator {
 
         this.swaggerDoc["paths"] = { ...this.paths };
 
-        if(this.options.jwt)
+        if(this.options.auth)
         {
             this.swaggerDoc.securityDefinitions = {
-                JWT: this.options.jwt
+                Auth: this.options.auth
             }
         }
 

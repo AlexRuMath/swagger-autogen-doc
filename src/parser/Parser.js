@@ -81,7 +81,7 @@ class Parser {
                     })
                 }
             } else {
-                console.log(`WARNING: The api in ${file} dont mark as swagger api`);
+                console.warn(`WARNING: The api in ${file} dont mark as swagger api`);
             }
 
             let url = new Url(endpoint, this.options);

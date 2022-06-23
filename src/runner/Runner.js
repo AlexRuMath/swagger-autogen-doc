@@ -1,16 +1,18 @@
-const fs = require("fs");
 const createApiRequests = require("./utils/create-api-requests");
 
 class Runner {
-    constructor(apiRequests, protocol, domein, port) {
-        this.requests = apiRequests;
+    constructor(PROTOCOL, DOMEIN, PORT) {
+        this.requests = [];
         this.responses = [];
-        this.protocol = protocol;
-        this.domein = domein;
-        this.port = port || '3000';
+        this.protocol = PROTOCOL;
+        this.domein = DOMEIN;
+        this.port = PORT || '3000';
     }
 
     async run() {
+        if(this.requests.length === 0) 
+            return console.warn("Runner with empty api requests. Maybe you call AddRunner() later Use()");
+
         this.requests.forEach(async (request) => {
             let url = this.protocol + "://" + this.domein + ":" + this.port;
             let response = await request.send(url);
@@ -19,9 +21,4 @@ class Runner {
     }
 }
 
-const swagger = JSON.parse(fs.readFileSync("/home/alex/Project/NodeJs/Spotlivy/swagger.json"));
-let requests = createApiRequests(swagger);
-let runner = new Runner(requests);
-runner.run();
-
-module.exports = Runner;
+module.exports = { Runner, createApiRequests };
