@@ -1,6 +1,5 @@
 const fs = require("fs");
 const createApiRequests = require("./utils/create-api-requests");
-let DataGen = require("./DataGen");
 
 class Runner {
     constructor(apiRequests, protocol, domein, port) {
