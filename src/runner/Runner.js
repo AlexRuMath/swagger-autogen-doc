@@ -14,7 +14,7 @@ class Runner {
         this.requests.forEach(async (request) => {
             let url = this.protocol + "://" + this.domein + ":" + this.port;
             let response = await request.send(url);
-            this.responses.pop(response);
+            this.responses.push(response);
         })
     }
 }
