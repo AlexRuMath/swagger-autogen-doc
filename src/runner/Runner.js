@@ -3,12 +3,12 @@ const createApiRequests = require("./utils/create-api-requests");
 let DataGen = require("./DataGen");
 
 class Runner {
-    constructor(apiRequests) {
+    constructor(apiRequests, protocol, domein, port) {
         this.requests = apiRequests;
         this.responses = [];
-        this.protocol = "http";
-        this.domein = "localhost";
-        this.port = "3000";
+        this.protocol = protocol;
+        this.domein = domein;
+        this.port = port || '3000';
     }
 
     async run() {
@@ -24,6 +24,5 @@ const swagger = JSON.parse(fs.readFileSync("/home/alex/Project/NodeJs/Spotlivy/s
 let requests = createApiRequests(swagger);
 let runner = new Runner(requests);
 runner.run();
-console.log(runner);
 
 module.exports = Runner;
