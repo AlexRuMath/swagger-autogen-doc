@@ -9,17 +9,22 @@ class ApiRequest {
     }
 
     async send(baseUrl) {
-        let apiResponse = new ApiResponse();
+        let response = {};
         let requestConfig = {
             method: this.method,
-            baseUrl: baseUrl,
+            baseURL: baseUrl,
             url: this.endpoint,
             headers: { 'ContentType': 'application/json' },
             ...this.parameters.example
         }
-        apiResponse.response = await axios(requestConfig);
-        
-        return apiResponse;
+        try {
+            response = await axios(requestConfig);
+            let apiResponse = new ApiResponse(response);
+            return apiResponse;
+        } catch (e) {
+            console.log(e.message);
+            return new ApiResponse(e.response);
+        }
     }
 }
 

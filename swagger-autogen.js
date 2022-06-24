@@ -4,9 +4,11 @@ const Options = require("./src/common/options");
 const BasicAuth = require('./src/auth/prototypes/BasicAuth');
 const BearerAuth = require('./src/auth/prototypes/BearerAuth');
 const ApiKeyAuth = require('./src/auth/prototypes/ApiKeyAuth');
-const swaggerUI = require('swagger-ui-express');
+const run = require("./src/listeners/run");
+const swaggerUI = require('./modules/swagger-ui-express');
 const ApiRepository = require('./src/repositories/api-repositories');
 const SchemaRepository = require('./src/repositories/schem-repositories');
+const hotLoad = require("./middleware/hot-load");
 
 
 class SwaggerAutogen {
@@ -14,7 +16,7 @@ class SwaggerAutogen {
         this.options = options;
         this.app = app;
         this.parser = new Parser(this.options);
-        this.pathToSwaggerDoc = options.absolutePath;
+        this.pathToSwaggerDoc = options.absolutePath + options.pathDoc.slice(1);
         this.url = this.options.endpointSwagger;
         this.openapi = {
             swagger: '2.0',
@@ -50,21 +52,15 @@ class SwaggerAutogen {
         this.openapi.schemes = [...schemes];
     }
 
-    get PathToDocument() {
-        return this.pathToSwaggerDoc;
-    }
-
-    set PathToDocument(path) {
-        this.pathToSwaggerDoc = path;
-    }
-
     Use() {
         let routs = this.parser.parse(this.options.folderApi);
         let docGenerate = new SwaggerSchemeGenerator(this.openapi, routs, this.options);
-        let swaggerDoc = docGenerate.writeDoc(this.pathToSwaggerDoc);
+        let swaggerDoc = docGenerate.writeDoc();
 
-        this.app.use(this.url, swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+        this.app.use(this.url, hotLoad(this.pathToSwaggerDoc), swaggerUI.serveFiles(swaggerDoc), swaggerUI.setup());
         console.log("The endpoint swagger docs: " + this.url);
+        
+        this.app.on('run', run(this.pathToSwaggerDoc));
     }
 }
 
