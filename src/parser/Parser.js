@@ -44,8 +44,7 @@ class Parser {
             let stat = fs.statSync(file);
             if (stat && stat.isDirectory()) {
                 results = results.concat(this.readAllFilesFromFolder(file));
-            }
-            else {
+            } else {
                 if (!file.match(/.js/)) continue;
 
                 let text = fs.readFileSync(file, 'utf-8');
