@@ -3,7 +3,10 @@ const getMethodInPath = require("./get-method-from-path");
 module.exports = (swaggerDoc) => {
     let res = [];
     for (let [endpoint, path] of Object.entries(swaggerDoc.paths)) {
-        res = res.concat(getMethodInPath(path, endpoint, swaggerDoc));
+        let newRes = getMethodInPath(path, endpoint, swaggerDoc);
+        for(let i = 0; i < newRes.length; i++){
+            res.push(newRes[i]);
+        }
     }
 
     return res;
