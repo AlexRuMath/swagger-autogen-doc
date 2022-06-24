@@ -3,7 +3,7 @@ const createString = require("./object-generator/create-string");
 const createInteger = require("./object-generator/create-integer");
 //const createNumber = require("./object-generator/create-number");
 const createArray = require("./object-generator/create-array");
-//const createBool = require("./object-generator/create-bool");
+const createBool = require("./object-generator/create-bool");
 
 class DataGen {
     constructor() {

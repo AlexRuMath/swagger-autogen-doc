@@ -1,5 +1,6 @@
 
 module.exports = (field_data, ref) => {
+    if(field_data.example) return field_data.example;
     if(field_data.enum) return field_data.enum[0];
 
     let res = "string";
