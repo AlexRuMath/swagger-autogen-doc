@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require("path");
 const Rout = require('./classes/Elements/Rout.js');
 const Url = require('./classes/Elements/Url.js');
-const Comment = require("./classes/Elements/Comment.js");
 const j2s = require("joi-to-swagger");
 const ApiRepository = require("../repositories/api-repositories");
 const SchemaRepository = require("../repositories/schem-repositories");
