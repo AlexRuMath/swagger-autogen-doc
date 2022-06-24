@@ -47,15 +47,16 @@ class Parser {
                 results = results.concat(this.readAllFilesFromFolder(file));
             }
             else {
-                if(!file.match(/.js/)) continue;
+                if (!file.match(/.js/)) continue;
 
                 let text = fs.readFileSync(file, 'utf-8');
                 let routs = this.getRouts(text, file);
-                if (routs.length !== 0) {
-                    let comments = this.getComments(text, file);
-                    let components = this.concatCommentAndRout(routs, comments);
-                    results = results.concat(components);
-                }
+
+                if (routs.length === 0) continue;
+
+                let comments = findComments(text, file);
+                let components = this.concatCommentAndRout(routs, comments);
+                results = results.concat(components);
             }
         }
         return results;
@@ -86,23 +87,6 @@ class Parser {
 
             let url = new Url(endpoint, this.options);
             res.push(new Rout(method, url, findMethod.index, filename));
-        }
-        return res;
-    }
-
-    getComments(text, file) {
-        let commentStartAll = [...text.matchAll(/<swagger>/g)];
-        let commentEndAll = [...text.matchAll(/<\/swagger>/g)];
-        let res = [];
-
-        if (commentStartAll.length !== 0 && commentEndAll.length !== 0) {
-            for (let i = 0; i < commentStartAll.length; i++) {
-                let startIndex = commentStartAll[i].index + commentStartAll[i][0].length;
-                let endIndex = commentEndAll[i].index;
-                let diff = endIndex - startIndex;
-                let comment = new Comment(text.substr(startIndex, diff), startIndex, endIndex);
-                res.push(comment);
-            }
         }
         return res;
     }
