@@ -1,5 +1,5 @@
 
-const Comment = require("./classes/Elements/Comment.js");
+const Comment = require("../classes/Elements/Comment");
 const startComment = "<swagger>";
 const endComment = "</swagger>";
 
