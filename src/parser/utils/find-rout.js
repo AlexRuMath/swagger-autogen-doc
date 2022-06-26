@@ -3,10 +3,15 @@ const SchemaRepository = require("../../repositories/schem-repositories");
 const Rout = require('../classes/Elements/Rout.js');
 const Url = require('../classes/Elements/Url.js');
 const j2s = require("joi-to-swagger");
-const _regexMethod = /('get'|'post'|'delete'|'patch')/;
+const _regexMethod = /(get|post|delete|patch)/;
 const _regexUrl = /('|")(\/.*)*('|")/;
 const findComments = require("./find-comments");
 const radiusSearchMethod = 50;
+
+const parseEndpoint = (endpoint) => {
+    let scobe = /('|")/.exec(endpoint);
+    return endpoint.split(scobe[0])[1];
+}
 
 module.exports = (text, file, options) => {
     let startPos = 0;
@@ -23,8 +28,8 @@ module.exports = (text, file, options) => {
         if (!findMethod) continue;
 
         let schemaApi = ApiRepository.getByPath(findPath[2]);
-        let method = schemaApi ? schemaApi.api.method : findMethod[1].split("'")[1];
-        let endpoint = schemaApi ? schemaApi.api.path : findPath[2];
+        let method = schemaApi ? schemaApi.api.method : findMethod[0];
+        let endpoint = schemaApi ? schemaApi.api.path : parseEndpoint(findPath[0]);
         let filename = file.split('/').pop().replace('.js', '');
 
         if (schemaApi) {
@@ -49,7 +54,8 @@ module.exports = (text, file, options) => {
 
         res.push(rout);
         let lastPart = findPath.index < findMethod.index ? findMethod : findPath;
-        startPos = lastPart.index + lastPart[0].slice(1, lastPart[0].length - 2).length;
+        let length = findPath.index < findMethod.index ? findMethod[0].length : endpoint.length;
+        startPos = lastPart.index + length;
     }
 
     return res;
