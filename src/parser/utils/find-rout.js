@@ -19,7 +19,6 @@ module.exports = (text, file, options) => {
 
     for (let i = 0; i < text.length; i++) {
         let subTxt = text.slice(startPos, i);
-
         let findPath = _regexUrl.exec(subTxt);
         if(!findPath) continue;
 
