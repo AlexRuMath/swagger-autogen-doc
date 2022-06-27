@@ -20,7 +20,7 @@
     "joi-to-swagger": "^6.0.1",
     "json-schema-defaults": "^0.4.0",
     "path-to-regexp": "^6.2.0",
-    "swagger-ui-express": "^4.4.0",
+    "swagger-ui-express": "git+https://github.com/AlexRuMath/swagger-ui-express#cb87ead858c8e73f6256d8a930ec1a6b17cfce10",
     "to-json-schema": "^0.2.5"
   },
   "author": "AlexRuMath",
