@@ -10,4 +10,3 @@ module.exports = class ParamTag {
         return;
     }
 }
-//# sourceMappingURL=ParamTag.js.map

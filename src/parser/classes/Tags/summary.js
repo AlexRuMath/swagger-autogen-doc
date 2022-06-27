@@ -8,4 +8,3 @@ module.exports = class SummaryTag {
         return this.content;
     }
 }
-//# sourceMappingURL=SummaryTag.js.map

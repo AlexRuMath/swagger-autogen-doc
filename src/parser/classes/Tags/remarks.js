@@ -6,4 +6,3 @@ module.exports = class RemarksTag {
         return this.content;
     }
 }
-//# sourceMappingURL=RemarksTag.js.map

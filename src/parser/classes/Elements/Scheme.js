@@ -4,4 +4,3 @@ module.exports = class Scheme {
         this.scheme = JSON.parse(jsonScheme);
     }
 }
-//# sourceMappingURL=Scheme.js.map

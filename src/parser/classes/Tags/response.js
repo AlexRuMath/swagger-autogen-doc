@@ -16,4 +16,3 @@ module.exports = class ResponseTag {
         return result;
     }
 }
-//# sourceMappingURL=ResponseTag.js.map

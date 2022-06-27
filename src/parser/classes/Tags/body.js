@@ -10,4 +10,3 @@ module.exports = class BodyTag {
         return;
     }
 }
-//# sourceMappingURL=BodyTag.js.map

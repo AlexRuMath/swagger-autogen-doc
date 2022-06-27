@@ -22,4 +22,3 @@ module.exports = class Comment {
         this.tags = visitor.tags;
     }
 }
-//# sourceMappingURL=Comment.js.map

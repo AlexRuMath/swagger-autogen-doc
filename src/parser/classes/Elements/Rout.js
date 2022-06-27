@@ -9,4 +9,3 @@ module.exports = class Rout {
         this.comment = comment;
     }
 }
-//# sourceMappingURL=Rout.js.map
