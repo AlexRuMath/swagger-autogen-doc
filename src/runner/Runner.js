@@ -11,7 +11,7 @@ class Runner {
 
     async run() {
         if (this.requests.length === 0)
-            return console.warn("Runner with empty api requests. Maybe you call AddRunner() later Use()");
+            return console.warn("Runner with empty api requests.");
 
 
         for (let i = 0; i < this.requests.length; i++) {
