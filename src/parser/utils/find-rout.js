@@ -3,9 +3,10 @@ const SchemaRepository = require("../../repositories/schem-repositories");
 const Rout = require('../classes/Elements/Rout.js');
 const Url = require('../classes/Elements/Url.js');
 const j2s = require("joi-to-swagger");
+const findComments = require("./find-comments");
+const path = require("path-to-regexp");
 const _regexMethod = /(get|post|delete|patch)/;
 const _regexUrl = /('|")(\/.*)*('|")/;
-const findComments = require("./find-comments");
 const radiusSearchMethod = 50;
 
 const parseEndpoint = (endpoint) => {
@@ -16,11 +17,15 @@ const parseEndpoint = (endpoint) => {
 module.exports = (text, file, options) => {
     let startPos = 0;
     let res = [];
+    let checkTemplate = path.match(options.url.templateRout);
 
     for (let i = 0; i < text.length; i++) {
         let subTxt = text.slice(startPos, i);
         let findPath = _regexUrl.exec(subTxt);
         if(!findPath) continue;
+
+        let check = checkTemplate(parseEndpoint(findPath[0]));
+        if(!check) continue;
 
         let txtForFindMethod = text.slice(startPos, i + radiusSearchMethod);
         let findMethod = _regexMethod.exec(txtForFindMethod);
