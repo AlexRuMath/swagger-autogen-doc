@@ -5,7 +5,7 @@ class Options {
         this.endpointSwagger = '/api-docs';
         this.folderApi = dir;
         this.foldersSchems = [];
-        this.jwt = null;
+        this.auth = null;
         this.url = {
             templateRout: "/api/:version/:controller/:resources+",
             groupBy: "controller",

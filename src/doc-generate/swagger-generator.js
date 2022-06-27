@@ -34,10 +34,11 @@ class SwaggerSchemeGenerator {
 
         this.swaggerDoc["paths"] = { ...this.paths };
 
-        if(this.options.jwt)
+        if(this.options.auth)
         {
-            this.swaggerDoc.securityDefinitions = {
-                JWT: this.options.jwt
+            this.swaggerDoc.securityDefinitions = {}
+            for(let [name, scheme] of Object.entries(this.options.auth)){
+                this.swaggerDoc.securityDefinitions[name] = scheme;
             }
         }
 

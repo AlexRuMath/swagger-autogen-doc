@@ -14,7 +14,7 @@ module.exports = {
     },
 
      getByPath(path){
-        let result = repositories.filter(api => api.path === path);
+        let result = repositories.filter(api => api.api.path === path);
         return result[0];
      }
 };

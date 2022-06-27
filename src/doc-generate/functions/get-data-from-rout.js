@@ -3,24 +3,48 @@ const pathBodyPrototype = require("../prototype/path-body");
 const queryParamPrototype = require("../prototype/query-param");
 const bodyParamPrototype = require("../prototype/body-param");
 const SchemaRepository = require("../../repositories/schem-repositories");
+const ApiRepository = require("../../repositories/api-repositories");
+
+const parseSchema = function(schema, filename){
+    let res = [];
+    let ref = { "$ref": '#/definitions/' + filename }; 
+    let isBody = schema.in === 'body';
+    
+    if(isBody){
+        let object = bodyParamPrototype();
+        object.schema = ref; 
+        res.push(object);
+        return res;
+    }
+
+    for (let name of Object.keys(schema.schema.properties)) {
+        let object = queryParamPrototype(name);
+        object.schema = ref;
+        res.push(object);
+    }
+
+    return res;
+}
 
 module.exports = (rout) => {
     let result = {};
     let pathBody = pathBodyPrototype(rout.url.controller);
+    let schemaApi = ApiRepository.getByPath(rout.url.path);
+    let auth = schemaApi ? schemaApi.auth : null;
 
     rout.url.params.forEach((param) => {
         pathBody.parameters.push(queryParamPrototype(param.name));
     })
 
-    if (rout.method === "post" || rout.method === "put" || rout.method === "patch") {
-        let schema = SchemaRepository.getByFileName(rout.filename);
-        let body = bodyParamPrototype();
-        if (schema) {
-            body.schema = {
-                "$ref": '#/definitions/' + rout.filename
-            } 
-        }
-        pathBody.parameters.push(body);
+    let schema = SchemaRepository.getByFileName(rout.filename);
+    if (schema) {
+        pathBody.parameters = parseSchema(schema, rout.filename);
+    }
+
+    if(auth){
+        let securitySchema = {}
+        securitySchema[auth] = [];
+        pathBody.security.push(securitySchema);
     }
 
     if (rout.comment) {
@@ -32,8 +56,8 @@ module.exports = (rout) => {
                 this.addTags(tag[0].content);
         }
     }
-    
-    result[rout.method] = {...pathBody}
+
+    result[rout.method] = { ...pathBody }
 
     return result;
 };
