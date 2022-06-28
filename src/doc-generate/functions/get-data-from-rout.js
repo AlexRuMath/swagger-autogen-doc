@@ -11,7 +11,6 @@ const parseSchema = function(schema, filename){
     let isBody = schema.in === 'body';
     
     if(isBody){
-        let object = bodyParamPrototype();
         object.schema = ref; 
         res.push(object);
         return res;
@@ -35,6 +34,10 @@ module.exports = (rout) => {
     rout.url.params.forEach((param) => {
         pathBody.parameters.push(queryParamPrototype(param.name));
     })
+
+    if(rout.method !== 'get'){
+        pathBody.parameters.push(bodyParamPrototype());
+    }
 
     let schema = SchemaRepository.getByFileName(rout.filename);
     if (schema) {
