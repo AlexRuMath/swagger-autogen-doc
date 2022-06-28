@@ -5,13 +5,14 @@ const bodyParamPrototype = require("../prototype/body-param");
 const SchemaRepository = require("../../repositories/schem-repositories");
 const ApiRepository = require("../../repositories/api-repositories");
 
-const parseSchema = function(schema, filename){
+const parseSchema = function (schema, filename) {
     let res = [];
-    let ref = { "$ref": '#/definitions/' + filename }; 
+    let ref = { "$ref": '#/definitions/' + filename };
     let isBody = schema.in === 'body';
-    
-    if(isBody){
-        object.schema = ref; 
+
+    if (isBody) {
+        let object = bodyParamPrototype();
+        object.schema = ref;
         res.push(object);
         return res;
     }
@@ -25,6 +26,10 @@ const parseSchema = function(schema, filename){
     return res;
 }
 
+const createParameters = function () {
+
+}
+
 module.exports = (rout) => {
     let result = {};
     let pathBody = pathBodyPrototype(rout.url.controller);
@@ -35,16 +40,14 @@ module.exports = (rout) => {
         pathBody.parameters.push(queryParamPrototype(param.name));
     })
 
-    if(rout.method !== 'get'){
-        pathBody.parameters.push(bodyParamPrototype());
-    }
-
     let schema = SchemaRepository.getByFileName(rout.filename);
     if (schema) {
         pathBody.parameters = parseSchema(schema, rout.filename);
+    } else if(rout.method !== 'get'){
+        pathBody.parameters.push(bodyParamPrototype());
     }
 
-    if(auth){
+    if (auth) {
         let securitySchema = {}
         securitySchema[auth] = [];
         pathBody.security.push(securitySchema);
