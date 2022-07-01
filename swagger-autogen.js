@@ -1,13 +1,13 @@
-const Parser = require('./src/parser/Parser');
-const SwaggerSchemeGenerator = require('./src/doc-generate/swagger-generator');
-const Options = require("./src/common/options");
-const BasicAuth = require('./src/auth/prototypes/BasicAuth');
-const BearerAuth = require('./src/auth/prototypes/BearerAuth');
-const ApiKeyAuth = require('./src/auth/prototypes/ApiKeyAuth');
-const run = require("./src/listeners/run");
+const Parser = require('./parser/Parser');
+const SwaggerSchemeGenerator = require('./doc-generate/swagger-generator');
+const Options = require("./common/options");
+const BasicAuth = require('./auth/prototypes/BasicAuth');
+const BearerAuth = require('./auth/prototypes/BearerAuth');
+const ApiKeyAuth = require('./auth/prototypes/ApiKeyAuth');
+const run = require("./listeners/run");
 const swaggerUI = require('swagger-ui-express');
-const ApiRepository = require('./src/repositories/api-repositories');
-const SchemaRepository = require('./src/repositories/schem-repositories');
+const ApiRepository = require('./repositories/api-repositories');
+const SchemaRepository = require('./repositories/schem-repositories');
 const hotLoad = require("./middleware/hot-load");
 
 
