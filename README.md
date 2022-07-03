@@ -16,15 +16,14 @@ npm install swagger-autogen-doc
 ```javascript
 const express = require('express')
 const app = express()
-const { OptionsSwagger, Swagger } = require("swagger-autogen-doc");
+const { OptionsSwagger } = require("swagger-autogen-doc");
 
 /*
 Подключение API к app
 */
 
-const options = new OptionsSwagger({}, __dirname);
-let swagger = new Swagger(app, options);
-swagger.Use();
+const options = {};
+require("swagger-autogen-doc").configure(app, options, __dirname);
 ```
 
 _ВАЖНО!_ Вызов функции **Use()** использовать после подключения API к объекту app. Т.к. не все данные могут быть получены.
