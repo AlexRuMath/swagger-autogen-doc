@@ -16,7 +16,6 @@ npm install swagger-autogen-doc
 ```javascript
 const express = require('express')
 const app = express()
-const { OptionsSwagger } = require("swagger-autogen-doc");
 
 /*
 Подключение API к app
@@ -26,22 +25,7 @@ const options = {};
 require("swagger-autogen-doc").configure(app, options, __dirname);
 ```
 
-_ВАЖНО!_ Вызов функции **Use()** использовать после подключения API к объекту app. Т.к. не все данные могут быть получены.
-Через объект Swagger можно модифицировать общую информацию о документации.
-
-* Title - название документации
-* Version - версию документации
-* Schemes - массив схем для запросов, по-умолчанию хранит в себе все схемы. Может включать в себя:
-  * http
-  * https
-
-Пример:
-
-```javascript
-swagger.Title = "Test API";
-swagger.Version = "2.0.0";
-swagger.Schemes = ["http"];
-```
+_ВАЖНО!_ Вызов функции **.confugure()** использовать после подключения API к объекту app. Т.к. не все данные могут быть получены.
 
 ## Использование
 
@@ -66,7 +50,7 @@ module.exports = () => {
 
 ```
 
-Функция **swaggerApi(object)** используется получение информации о данном объекте. Поэтому и рекомендуется использовать **Use()** после подключения API для отработки данных функций.
+Функция **swaggerApi(object)** используется получение информации о данном объекте. Поэтому и рекомендуется использовать **configure()** после подключения API для отработки данных функций.
 Описание Joi схемы следующее, если при её описании были использованы example(), то это будет использоваться для вывода примера запроса в документации.
 _ВАЖНО!_. Примеры для **query** параметров не будут отображаться в документации, но будут использованы для тестовых запросов
 
@@ -157,8 +141,7 @@ module.exports = () => {
 
 ## Настройки
 
-Класс **OptionsSwagger** принимает в себя объект в настройками и путь к директории проекта.
-Существуют следующие настройки:
+Объект настроек принимает в себя следующие поля:
 
 * **folderApi** - путь к папке где лежат API. Для оптимизации парсинга проекта
 * **pathDoc** - путь куда будет сохраняться .json файл документа относительно директории проекта. По-умолчанию равен "./swagger.json"
@@ -167,24 +150,28 @@ module.exports = () => {
   * **templateRout** - шаблон endpoint. По-умолчанию равен "/api/:version/:controller/:resources+". То есть каждый endpoint будет иметь такую схему, например: '/api/v1/public/login'.
 Здесь **v1** - version, **public** - controller, **login** - resources.
   * **groupBy** - по какому из частей endpoint будет группировка. По-умолчанию "controller".
+* **Title** - название документации
+* **Version** - версию документации
+* **Schemes** - массив схем для запросов, по-умолчанию хранит в себе все схемы. Может включать в себя:
+  * **http**
+  * **https**
 
 ## Авторизация
 
 Пример подключения авторизации:
 
 ```javascript
-const { OptionsSwagger, Swagger, AuthTypes } = require("swagger-autogen-doc");
+const { AuthTypes } = require("swagger-autogen-doc");
 
 const apiKey = new AuthTypes.ApiKeyAuth();
 apiKey.Name = "Authorization";
 
-const options = new OptionsSwagger({
+const options = {
   auth: {
     Auth: apiKey
   }
-}, __dirname);
-let swagger = new Swagger(app, options);
-swagger.Use();
+}
+require("swagger-autogen-doc").configure(app, options, __dirname);
 ```
 
 В объекте AuthTypes лежат прототипы методов авторизации, такие как:

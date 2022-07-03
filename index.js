@@ -31,25 +31,12 @@ class SwaggerAutogen {
             ],
         }
 
-        if (options.foldersSchems.length != 0) {
-            SchemaRepository.addFromFolder(options.foldersSchems);
-        }
-    }
-
-    set Title(title) {
-        this.openapi.info.title = title;
-    }
-
-    set Version(version) {
-        this.openapi.info.version = version;
-    }
-
-    set Description(description) {
-        this.openapi.info.description = description;
-    }
-
-    set Schemes(schemes) {
-        this.openapi.schemes = [...schemes];
+        
+        if (options.foldersSchems.length != 0) SchemaRepository.addFromFolder(options.foldersSchems);
+        if (options.Title) this.openapi.info.title = options.Title;
+        if (options.Version) this.openapi.info.version = options.Version;
+        if (options.Description) this.openapi.info.description = options.Description;
+        if (options.Schemes) this.openapi.schemes = options.Schemes;
     }
 
     Use() {
