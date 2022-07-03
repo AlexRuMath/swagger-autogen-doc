@@ -44,11 +44,11 @@ class SwaggerAutogen {
         this.openapi.info.version = version;
     }
 
-    set Description(description){
+    set Description(description) {
         this.openapi.info.description = description;
     }
 
-    set Schemes(schemes){
+    set Schemes(schemes) {
         this.openapi.schemes = [...schemes];
     }
 
@@ -59,12 +59,12 @@ class SwaggerAutogen {
 
         this.app.use(this.url, hotLoad(this.pathToSwaggerDoc), swaggerUI.serveFiles(swaggerDoc), swaggerUI.setup());
         console.log("The endpoint swagger docs: " + this.url);
-        
+
         this.app.on('run', run(this.pathToSwaggerDoc));
     }
 }
 
-const swaggerApi = function (api, auth=null) {
+const swaggerApi = function (api, auth = null) {
     ApiRepository.add({
         api: api,
         auth: auth
@@ -80,5 +80,11 @@ module.exports = {
         BasicAuth,
         BearerAuth,
         ApiKeyAuth
+    },
+
+    configure: function (app, options, dir) {
+        let swaggerOptions = new Options(options, dir);
+        let swagger = new SwaggerAutogen(app, swaggerOptions);
+        swagger.Use();
     }
 };
